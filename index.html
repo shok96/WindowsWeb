@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AndlancerOS</title>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gravity-ui/uikit@latest/styles/fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gravity-ui/uikit@latest/styles/styles.css">
+  
+  <!-- js-dos 6.22 (old API for DOOM compatibility) -->
+  <link rel="stylesheet" href="https://js-dos.com/6.22/current/js-dos.css">
+  <script src="https://js-dos.com/cdn/js-dos-api.js" onload="console.log('✅ js-dos-api.js loaded'); window.__dosbox_ready = true;" onerror="console.error('❌ Failed to load js-dos-api.js');"></script>
+  
+  <!-- jsmediatags for reading audio metadata -->
+  <script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.9.5/dist/jsmediatags.min.js"></script>
+</head>
+<body class="g-root g-root_theme_light">
+  <div id="app">
+    <!-- Экраны -->
+    <div id="os-selection-container"></div>
+    <div id="bootscreen-container"></div>
+    <div id="system-loading-container" style="display: none;"></div>
+    <div id="login-container" style="display: none;"></div>
+    <div id="desktop-container" style="display: none;"></div>
+    <div id="taskbar-container" style="display: none;"></div>
+    <div id="startmenu-container" style="display: none;"></div>
+    <div id="windows-container" style="display: none;"></div>
+    <div id="shutdown-container"></div>
+    <div id="power-on-container"></div>
+  </div>
+  
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
+

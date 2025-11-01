@@ -1,0 +1,290 @@
+.task-manager-app.win11-style {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+}
+
+.tm-sidebar {
+    width: 58px;
+    background-color: var(--bg-secondary);
+    padding: 8px 0;
+    border-right: 1px solid var(--border-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.tm-sidebar-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--border-radius);
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    color: var(--text-primary);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tm-sidebar-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.tm-sidebar-btn:hover {
+    background-color: var(--bg-hover);
+}
+
+.tm-sidebar-btn.active {
+    background-color: var(--bg-tertiary);
+}
+
+.tm-sidebar-btn .tm-sidebar-tooltip {
+    visibility: hidden;
+    width: 120px;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    left: 110%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.tm-sidebar-btn:hover .tm-sidebar-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+.tm-main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px 16px 24px;
+    min-width: 0;
+    min-height: 0;
+}
+
+.tm-header {
+    padding: 16px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.tm-header h3 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.tm-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tm-search-bar {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    min-width: 250px;
+}
+
+.tm-action-btn {
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-primary);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+}
+.tm-action-btn:hover {
+    background-color: var(--bg-tertiary);
+}
+
+
+.tm-tab-panel {
+    display: none;
+    flex-direction: column;
+    flex: 1; /* Занимает все доступное пространство */
+    min-height: 0; /* Обязательно для дочерних flex-элементов */
+    overflow: hidden; /* Скрываем overflow, так как скролл будет ниже */
+}
+
+.tm-tab-panel.active {
+    display: flex;
+}
+
+.tm-perf-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-primary);
+    flex-shrink: 0;
+}
+
+.perf-metric {
+    text-align: left;
+}
+
+.perf-metric .name {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.perf-metric .value {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.tm-table-container {
+    flex: 1; /* Растягивается на все доступное место */
+    min-height: 0; /* Критически важно для включения прокрутки */
+    overflow-y: auto; /* Включаем прокрутку только для этого блока */
+    margin-top: 8px;
+}
+
+.tm-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tm-table th, .tm-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid transparent; /* for spacing */
+}
+
+.tm-table th {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--text-secondary);
+    position: sticky;
+    top: 0;
+    background-color: var(--bg-primary);
+}
+
+.tm-table tbody tr:hover {
+    background-color: var(--bg-hover);
+}
+.tm-table tbody tr.selected {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+
+.process-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.process-icon-font {
+    width: 20px;
+    font-size: 16px;
+    text-align: center;
+}
+
+
+/* Performance Panel */
+#performance-panel.active {
+    display: flex;
+}
+
+.tm-perf-view {
+    display: flex;
+    gap: 16px;
+    height: 100%;
+}
+
+.tm-perf-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 180px;
+    flex-shrink: 0;
+}
+
+.tm-perf-sidebar-btn {
+    width: 100%;
+    padding: 8px 12px;
+    text-align: left;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    cursor: pointer;
+}
+.tm-perf-sidebar-btn:hover {
+    background-color: var(--bg-hover);
+}
+.tm-perf-sidebar-btn.active {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-secondary);
+}
+
+.tm-perf-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.tm-perf-graph-header {
+    margin-bottom: 16px;
+}
+.tm-perf-graph-header h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+.tm-perf-graph-header p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 4px 0 0;
+}
+
+.perf-graph-container {
+    width: 100%;
+    flex-grow: 1;
+    margin-bottom: 16px;
+}
+
+#cpu-graph {
+    width: 100%;
+    height: 100%;
+}
+
+.tm-perf-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    font-size: 12px;
+}
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+}
+.detail-item span {
+    color: var(--text-secondary);
+}
+.detail-item strong {
+    font-weight: 600;
+}

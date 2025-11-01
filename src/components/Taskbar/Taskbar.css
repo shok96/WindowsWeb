@@ -1,0 +1,188 @@
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  background: var(--bg-acrylic);
+  border-top: 1px solid var(--border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  z-index: var(--z-taskbar);
+}
+
+.taskbar-center {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+}
+
+.start-button {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  border-radius: 4px;
+}
+
+.start-button:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.windows-logo {
+  color: var(--accent-color);
+}
+
+.taskbar-icons {
+  display: flex;
+  gap: 4px;
+}
+
+.taskbar-app-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  position: relative;
+}
+
+.taskbar-app-icon:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.taskbar-app-icon .icon {
+  font-size: 20px;
+}
+
+.taskbar-app-icon .app-indicator {
+  position: absolute;
+  bottom: 2px;
+  width: 4px;
+  height: 4px;
+  background-color: var(--accent-color);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.taskbar-app-icon.running .app-indicator {
+  opacity: 1;
+}
+
+.taskbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.system-tray {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.tray-icon {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.tray-icon:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.clock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.time {
+  font-weight: 600;
+}
+
+.date {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 768px) {
+  .taskbar {
+    height: 56px; /* Slightly taller for easier touch */
+    padding: 0 8px;
+  }
+
+  .taskbar-center {
+    justify-content: flex-start; /* Align to the left */
+    gap: 2px;
+  }
+  
+  .start-button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .taskbar-app-icon {
+    width: 38px;
+    height: 38px;
+  }
+  
+  .taskbar-app-icon .icon {
+    font-size: 18px;
+  }
+
+  .system-tray {
+    gap: 4px;
+  }
+  
+  .tray-icon {
+    display: none; /* Hide individual tray icons */
+  }
+
+  /* Show only essential info in clock */
+  .date {
+    display: none;
+  }
+
+  .clock {
+    padding: 4px;
+    font-size: 14px;
+  }
+  
+  .task-switcher-button {
+    display: flex;
+  }
+
+  /* You could add a hamburger menu icon to reveal hidden tray icons */
+  .mobile-tray-button {
+    display: block; /* Initially hidden, shown in JS */
+  }
+}
+
+.task-switcher-button {
+  width: 48px;
+  height: 48px;
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  border-radius: 4px;
+}
+
+.task-switcher-button:hover {
+    background-color: var(--bg-tertiary);
+}
+
+
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <script>self["MonacoEnvironment"] = (function (paths) {
+          return {
+            globalAPI: false,
+            getWorkerUrl : function (moduleId, label) {
+              var result =  paths[label];
+              if (/^((http:)|(https:)|(file:)|(\/\/))/.test(result)) {
+                var currentUrl = String(window.location);
+                var currentOrigin = currentUrl.substr(0, currentUrl.length - window.location.hash.length - window.location.search.length - window.location.pathname.length);
+                if (result.substring(0, currentOrigin.length) !== currentOrigin) {
+                  var js = '/*' + label + '*/importScripts("' + result + '");';
+                  var blob = new Blob([js], { type: 'application/javascript' });
+                  return URL.createObjectURL(blob);
+                }
+              }
+              return result;
+            }
+          };
+        })({
+  "editorWorkerService": "/monacoeditorwork/editor.worker.bundle.js",
+  "css": "/monacoeditorwork/css.worker.bundle.js",
+  "html": "/monacoeditorwork/html.worker.bundle.js",
+  "json": "/monacoeditorwork/json.worker.bundle.js",
+  "typescript": "/monacoeditorwork/ts.worker.bundle.js",
+  "javascript": "/monacoeditorwork/ts.worker.bundle.js",
+  "less": "/monacoeditorwork/css.worker.bundle.js",
+  "scss": "/monacoeditorwork/css.worker.bundle.js",
+  "handlebars": "/monacoeditorwork/html.worker.bundle.js",
+  "razor": "/monacoeditorwork/html.worker.bundle.js"
+});</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AndlancerOS</title>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gravity-ui/uikit@latest/styles/fonts.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@gravity-ui/uikit@latest/styles/styles.css">
+  
+  <!-- js-dos 6.22 (old API for DOOM compatibility) -->
+  <link rel="stylesheet" href="https://js-dos.com/6.22/current/js-dos.css">
+  <script src="https://js-dos.com/cdn/js-dos-api.js" onload="console.log('✅ js-dos-api.js loaded'); window.__dosbox_ready = true;" onerror="console.error('❌ Failed to load js-dos-api.js');"></script>
+  
+  <!-- jsmediatags for reading audio metadata -->
+  <script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.9.5/dist/jsmediatags.min.js"></script>
+  <script type="module" crossorigin src="/assets/index-jNOIsfy6.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DunE373-.css">
+</head>
+<body class="g-root g-root_theme_light">
+  <div id="app">
+    <!-- Экраны -->
+    <div id="bootscreen-container"></div>
+    <div id="system-loading-container" style="display: none;"></div>
+    <div id="login-container" style="display: none;"></div>
+    <div id="desktop-container" style="display: none;"></div>
+    <div id="taskbar-container" style="display: none;"></div>
+    <div id="startmenu-container" style="display: none;"></div>
+    <div id="windows-container" style="display: none;"></div>
+    <div id="shutdown-container"></div>
+  </div>
+  
+</body>
+</html>
+

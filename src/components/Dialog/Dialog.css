@@ -1,0 +1,100 @@
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9998;
+    backdrop-filter: blur(5px);
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.dialog-overlay.fade-out {
+    opacity: 0;
+}
+
+.dialog-box {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-large);
+    width: 100%;
+    max-width: 400px;
+    overflow: hidden;
+    animation: dialog-fade-in 0.2s ease-out;
+}
+
+@keyframes dialog-fade-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.dialog-header {
+    padding: 12px 16px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.dialog-content {
+    padding: 16px;
+    line-height: 1.6;
+}
+
+.dialog-content p {
+    margin-bottom: 16px;
+}
+
+.dialog-input {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--border-radius-small);
+    color: var(--text-primary);
+}
+
+.dialog-input:focus {
+    border-color: var(--accent-color);
+}
+
+.dialog-footer {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    background-color: var(--bg-tertiary);
+}
+
+.dialog-button {
+    padding: 8px 16px;
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--border-primary);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.dialog-button:hover {
+    background-color: var(--bg-hover);
+}
+
+.dialog-button.ok-button {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+.dialog-button.ok-button:hover {
+    background-color: var(--accent-hover);
+}
+

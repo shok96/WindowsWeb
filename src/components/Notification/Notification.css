@@ -1,0 +1,254 @@
+/**
+ * Notification.css - Стили для всплывающих уведомлений
+ */
+
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+    max-width: 400px;
+}
+
+.notification {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #ffffff;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15),
+                0 2px 8px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(0, 0, 0, 0.08);
+    min-width: 280px;
+    max-width: 380px;
+    opacity: 0;
+    transform: translateX(450px);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: auto;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+}
+
+.notification-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification-hiding {
+    opacity: 0;
+    transform: translateX(400px);
+}
+
+.notification-icon {
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 1px;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-title {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 4px;
+    color: #1a1a1a;
+    letter-spacing: -0.1px;
+    line-height: 1.3;
+}
+
+.notification-message {
+    font-size: 12px;
+    color: #4a4a4a;
+    line-height: 1.4;
+    word-wrap: break-word;
+    font-weight: 400;
+}
+
+/* Типы уведомлений */
+.notification-info {
+    border-left: 5px solid #0078d4;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+    box-shadow: 0 8px 24px rgba(0, 120, 212, 0.2),
+                0 2px 8px rgba(0, 120, 212, 0.15),
+                0 0 0 1px rgba(0, 120, 212, 0.1);
+}
+
+.notification-success {
+    border-left: 5px solid #107c10;
+    background: linear-gradient(135deg, #ffffff 0%, #f0faf0 100%);
+    box-shadow: 0 8px 24px rgba(16, 124, 16, 0.2),
+                0 2px 8px rgba(16, 124, 16, 0.15),
+                0 0 0 1px rgba(16, 124, 16, 0.1);
+}
+
+.notification-warning {
+    border-left: 5px solid #ffb900;
+    background: linear-gradient(135deg, #ffffff 0%, #fffbf0 100%);
+    box-shadow: 0 8px 24px rgba(255, 185, 0, 0.25),
+                0 2px 8px rgba(255, 185, 0, 0.2),
+                0 0 0 1px rgba(255, 185, 0, 0.15);
+}
+
+.notification-error {
+    border-left: 5px solid #d13438;
+    background: linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);
+    box-shadow: 0 8px 24px rgba(209, 52, 56, 0.25),
+                0 2px 8px rgba(209, 52, 56, 0.2),
+                0 0 0 1px rgba(209, 52, 56, 0.15);
+}
+
+.notification-error .notification-title {
+    color: #d13438;
+}
+
+.notification-error .notification-message {
+    color: #5a1a1a;
+}
+
+.notification-warning .notification-title {
+    color: #cc9500;
+}
+
+.notification-warning .notification-message {
+    color: #5a4a00;
+}
+
+.notification-success .notification-title {
+    color: #0d5d0d;
+}
+
+.notification-success .notification-message {
+    color: #1a3d1a;
+}
+
+.notification-info .notification-title {
+    color: #0063b1;
+}
+
+.notification-info .notification-message {
+    color: #003d6b;
+}
+
+/* Темная тема */
+body.dark-theme .notification {
+    background: #2d2d2d;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5),
+                0 2px 8px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .notification-title {
+    color: #ffffff;
+}
+
+body.dark-theme .notification-message {
+    color: #d0d0d0;
+}
+
+
+body.dark-theme .notification-info {
+    background: linear-gradient(135deg, #2d2d2d 0%, #1a2332 100%);
+    border-left-color: #4a9eff;
+    box-shadow: 0 8px 24px rgba(0, 120, 212, 0.3),
+                0 2px 8px rgba(0, 120, 212, 0.2),
+                0 0 0 1px rgba(0, 120, 212, 0.2);
+}
+
+body.dark-theme .notification-success {
+    background: linear-gradient(135deg, #2d2d2d 0%, #1a2d1a 100%);
+    border-left-color: #4cd964;
+    box-shadow: 0 8px 24px rgba(16, 124, 16, 0.3),
+                0 2px 8px rgba(16, 124, 16, 0.2),
+                0 0 0 1px rgba(16, 124, 16, 0.2);
+}
+
+body.dark-theme .notification-warning {
+    background: linear-gradient(135deg, #2d2d2d 0%, #332d1a 100%);
+    border-left-color: #ffcc00;
+    box-shadow: 0 8px 24px rgba(255, 185, 0, 0.3),
+                0 2px 8px rgba(255, 185, 0, 0.2),
+                0 0 0 1px rgba(255, 185, 0, 0.2);
+}
+
+body.dark-theme .notification-error {
+    background: linear-gradient(135deg, #2d2d2d 0%, #331a1a 100%);
+    border-left-color: #ff4d4d;
+    box-shadow: 0 8px 24px rgba(209, 52, 56, 0.35),
+                0 2px 8px rgba(209, 52, 56, 0.25),
+                0 0 0 1px rgba(209, 52, 56, 0.25);
+}
+
+body.dark-theme .notification-error .notification-title {
+    color: #ff6b6b;
+}
+
+body.dark-theme .notification-error .notification-message {
+    color: #ffcccc;
+}
+
+body.dark-theme .notification-warning .notification-title {
+    color: #ffcc00;
+}
+
+body.dark-theme .notification-warning .notification-message {
+    color: #ffeeaa;
+}
+
+body.dark-theme .notification-success .notification-title {
+    color: #4cd964;
+}
+
+body.dark-theme .notification-success .notification-message {
+    color: #b3e5b3;
+}
+
+body.dark-theme .notification-info .notification-title {
+    color: #4a9eff;
+}
+
+body.dark-theme .notification-info .notification-message {
+    color: #b3d9ff;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .notification-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+
+    .notification {
+        min-width: auto;
+        max-width: none;
+        padding: 12px 14px;
+    }
+
+    .notification-icon {
+        font-size: 18px;
+    }
+
+    .notification-title {
+        font-size: 12px;
+    }
+
+    .notification-message {
+        font-size: 11px;
+    }
+}
+

@@ -1,0 +1,95 @@
+@import 'drawflow/dist/drawflow.min.css';
+
+.visual-ide-app {
+  display: flex;
+  flex-direction: column;
+  background-color: #2d2d2d;
+  color: #f1f1f1;
+  flex: 1;
+  min-height: 0;
+}
+
+.visual-ide-toolbar {
+  padding: 8px;
+  background-color: #3c3c3c;
+  border-bottom: 1px solid #1e1e1e;
+}
+
+.visual-ide-toolbar button {
+  background-color: #0e639c;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.visual-ide-toolbar button:hover {
+  background-color: #1177bb;
+}
+
+#drawflow {
+  flex-grow: 1;
+  width: 100%;
+  position: relative;
+  background-image: linear-gradient(45deg, #3a3a3a 25%, transparent 25%), 
+                    linear-gradient(-45deg, #3a3a3a 25%, transparent 25%), 
+                    linear-gradient(45deg, transparent 75%, #3a3a3a 75%), 
+                    linear-gradient(-45deg, transparent 75%, #3a3a3a 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+/* Drawflow specific styling */
+.drawflow-node {
+  background: #4a4a4a !important;
+  color: #f1f1f1 !important;
+  border: 1px solid #606060 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5) !important;
+}
+.drawflow-node .title-box {
+  background: #3c3c3c !important;
+  position: relative; /* Needed for delete button positioning */
+}
+
+.drawflow-delete-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.drawflow-node:hover .drawflow-delete-btn {
+  opacity: 1;
+}
+
+.drawflow-delete-btn:hover {
+  color: #ff8b8b;
+}
+
+.drawflow-node .inputs, .drawflow-node .outputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space out connection points */
+}
+
+.drawflow-node input {
+  width: calc(100% - 10px) !important;
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid #606060;
+  background-color: #3c3c3c;
+  color: #f1f1f1;
+}
+
+.visual-ide-output {
+  height: 150px;
+  flex-shrink: 0;
+  background-color: #1e1e1e;
+  border-top: 1px solid #3c3c3c;
+  padding: 8px;
+  font-family: Consolas, "Courier New", monospace;
+  overflow-y: auto;
+}

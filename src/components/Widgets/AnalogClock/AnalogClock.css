@@ -1,0 +1,98 @@
+.analog-clock-widget {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 220px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    cursor: move;
+    z-index: 10;
+}
+
+.clock-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.clock-mark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1px;
+    height: 6px;
+    background-color: var(--text-secondary);
+    transform-origin: 50% 0;
+    margin-left: -0.5px;
+}
+
+.clock-mark.hour-mark {
+    width: 3px;
+    height: 10px;
+    background-color: var(--text-primary);
+    margin-left: -1.5px;
+}
+
+.clock-number {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    color: var(--text-primary);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom center;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.hour-hand {
+    width: 5px;
+    height: 25%;
+    background-color: var(--text-primary);
+}
+
+.minute-hand {
+    width: 3px;
+    height: 35%;
+    background-color: var(--text-primary);
+}
+
+.second-hand {
+    width: 1px;
+    height: 40%;
+    background-color: var(--accent-color);
+}
+
+.center-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid var(--bg-primary);
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 768px) {
+    .analog-clock-widget {
+        width: 150px;
+        height: 150px;
+    }
+
+    .clock-number {
+        font-size: 14px;
+    }
+}

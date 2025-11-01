@@ -1,0 +1,27 @@
+{
+  "name": "windowsweb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@gravity-ui/icons": "^2.16.0",
+    "@gravity-ui/uikit": "^7.25.0",
+    "interactjs": "^1.10.27",
+    "sass": "^1.93.2",
+    "vite": "^7.1.12",
+    "vite-plugin-monaco-editor-esm": "^2.0.2"
+  },
+  "dependencies": {
+    "drawflow": "^0.0.60"
+  }
+}

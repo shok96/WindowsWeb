@@ -1,0 +1,123 @@
+.desktop {
+  position: absolute;
+  width: 100vw;
+  height: calc(100vh - 48px); /* Full height minus taskbar */
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #000;
+  overflow: hidden;
+  z-index: 0;
+  transition: background-image 0.5s ease-in-out;
+}
+
+.desktop::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    background-image: var(--desktop-bg-old);
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.desktop.wallpaper-changing::before {
+    opacity: 1;
+}
+
+.desktop-wallpaper {
+  display: none; /* No longer needed */
+}
+
+.wallpaper-image {
+  display: none; /* No longer needed */
+}
+
+.desktop-icons-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.desktop-icon {
+  position: absolute;
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 4px;
+  transition: background-color 0.1s ease;
+}
+
+.desktop-icon:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.desktop-icon.selected {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.icon-image {
+  font-size: 40px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-label {
+  font-size: 12px;
+  color: white;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.desktop-selection-rect {
+  position: absolute;
+  border: 1px solid var(--accent-color);
+  background-color: rgba(0, 120, 212, 0.3);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 768px) {
+  .desktop {
+    /* Adjust height for mobile taskbar if it has a different size */
+    height: calc(100vh - 56px); 
+  }
+
+  .desktop-icons-container {
+    padding: 10px; /* Add some padding on mobile */
+  }
+
+  .desktop-icon {
+    width: 70px;
+    padding: 4px;
+    gap: 2px;
+  }
+  
+  .icon-image {
+    font-size: 32px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .icon-label {
+    font-size: 11px;
+  }
+}
+

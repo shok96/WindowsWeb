@@ -1,0 +1,66 @@
+.code-editor-app {
+  display: flex;
+  flex-direction: column;
+  background-color: #1e1e1e;
+  overflow: hidden; /* Prevent scrollbars on main container */
+  flex: 1;
+  min-height: 0;
+}
+
+.editor-main-layout {
+  flex-grow: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+#editor-container {
+  min-width: 0;
+  flex-grow: 1;
+}
+
+.editor-terminal {
+  flex-shrink: 0;
+  height: 200px;
+  background-color: #252526;
+  border-top: 1px solid #333333;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 12px;
+  background-color: #333333;
+  color: #cccccc;
+  font-size: 13px;
+}
+
+.run-button {
+  background-color: #0e639c;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+}
+
+.run-button:hover {
+  background-color: #1177bb;
+}
+
+.run-button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+.output-console {
+  flex-grow: 1;
+  padding: 8px 12px;
+  margin: 0;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 14px;
+  color: #cccccc;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-y: auto;
+}

@@ -1,0 +1,7 @@
+{
+  "version": "1.0",
+  "description": "DOOM Shareware",
+  "main": "DOOM.EXE",
+  "onExit": "exit"
+}
+

@@ -1,0 +1,80 @@
+.paint-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--bg-secondary);
+}
+
+.paint-toolbar {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping on smaller windows */
+  align-items: center;
+  gap: 1.5rem; /* Increased gap */
+  padding: 12px;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.tool-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tool-group label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.paint-toolbar input[type="color"] {
+  width: 40px;
+  height: 30px;
+  padding: 0 2px;
+  border: 1px solid var(--border-primary);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.paint-toolbar input[type="range"] {
+  width: 120px;
+  cursor: pointer;
+}
+
+.width-preview {
+    min-width: 25px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.tool-btn, .action-btn, .file-input-label {
+    padding: 6px 12px;
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.tool-btn:hover, .action-btn:hover, .file-input-label:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--accent-hover);
+}
+
+.tool-btn.active {
+    background-color: var(--accent-color);
+    border-color: var(--accent-hover);
+    color: white;
+}
+
+.io-group {
+    margin-left: auto; /* Push save/load to the right */
+}
+
+.paint-canvas {
+  flex-grow: 1;
+  background-color: #ffffff; /* Default background for the canvas itself */
+  cursor: crosshair;
+}
+

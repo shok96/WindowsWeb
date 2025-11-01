@@ -1,0 +1,33 @@
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+import * as React from 'react';
+import { useActionHandlers } from "../../hooks/index.js";
+import { Box } from "../layout/index.js";
+import { block } from "../utils/cn.js";
+import "./Card.css";
+const b = block('card');
+export const Card = React.forwardRef(function Card(props, ref) {
+    const { type = 'container', theme, view, size = 'm', children, className, onClick, disabled, selected, ...restProps } = props;
+    const isTypeAction = type === 'action';
+    const isTypeSelection = type === 'selection';
+    const isTypeContainer = type === 'container';
+    /* Clickable card — only with type 'action' or 'selection' and not selected or disabled */
+    const hasAction = isTypeAction || isTypeSelection;
+    const isClickable = hasAction && Boolean(onClick) && !disabled;
+    /* Theme only with type 'container' */
+    const defaultTheme = isTypeContainer ? 'normal' : undefined;
+    /* View only with type 'container' and 'selection' */
+    const defaultView = isTypeContainer || isTypeSelection ? 'outlined' : undefined;
+    const handleClick = isClickable ? onClick : undefined;
+    const { onKeyDown } = useActionHandlers(onClick);
+    return (_jsx(Box, { ref: ref, role: isClickable ? 'button' : undefined, className: b({
+            theme: theme || defaultTheme,
+            view: view || defaultView,
+            type,
+            selected,
+            size,
+            disabled,
+            clickable: isClickable,
+        }, className), onClick: handleClick, onKeyDown: isClickable ? onKeyDown : undefined, tabIndex: isClickable ? 0 : undefined, ...restProps, children: children }));
+});
+//# sourceMappingURL=Card.js.map

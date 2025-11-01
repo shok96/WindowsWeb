@@ -1,0 +1,78 @@
+// Windows 11 Design System Variables
+
+:root {
+  // Accent Colors
+  --accent-color: #0078d4;
+  --accent-hover: #106ebe;
+  --accent-pressed: #005a9e;
+  
+  // Background Colors (Light Theme)
+  --bg-primary: #f3f3f3;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f9f9f9;
+  --bg-acrylic: rgba(243, 243, 243, 0.7);
+  
+  // Text Colors (Light Theme)
+  --text-primary: #000000;
+  --text-secondary: #605e5c;
+  --text-tertiary: #8a8886;
+  --text-disabled: #c8c6c4;
+  
+  // Border Colors
+  --border-primary: rgba(0, 0, 0, 0.1);
+  --border-secondary: rgba(0, 0, 0, 0.05);
+  
+  // Shadow
+  --shadow-small: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-large: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --shadow-window: 0 8px 32px rgba(0, 0, 0, 0.2);
+  
+  // Border Radius
+  --border-radius: 8px;
+  --border-radius-small: 4px;
+  --border-radius-large: 12px;
+  
+  // Transitions
+  --transition-speed: 0.2s;
+  --transition-timing: cubic-bezier(0.16, 1, 0.3, 1);
+  
+  // Layout
+  --taskbar-height: 48px;
+  --startmenu-width: 600px;
+  --startmenu-height: 680px;
+  
+  // Z-index
+  --z-desktop: 1;
+  --z-window: 100;
+  --z-taskbar: 1000;
+  --z-startmenu: 1100;
+  --z-contextmenu: 1200;
+}
+
+[data-theme="dark"] {
+  // Background Colors (Dark Theme)
+  --bg-primary: #202020;
+  --bg-secondary: #2b2b2b;
+  --bg-tertiary: #1f1f1f;
+  --bg-acrylic: rgba(32, 32, 32, 0.7);
+  
+  // Text Colors (Dark Theme)
+  --text-primary: #ffffff;
+  --text-secondary: #e1e1e1;
+  --text-tertiary: #a8a8a8;
+  --text-disabled: #6d6d6d;
+  
+  // Border Colors
+  --border-primary: rgba(255, 255, 255, 0.1);
+  --border-secondary: rgba(255, 255, 255, 0.05);
+  
+  // Shadow
+  --shadow-small: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-large: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-window: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+
+

@@ -1,0 +1,26 @@
+.shutdown-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #0078d4;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 10000;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.shutdown-content h1 {
+    font-size: 2.5em;
+    font-weight: 300;
+    margin: 20px 0;
+}
+
+.shutdown-content p {
+    font-size: 1.2em;
+}
+

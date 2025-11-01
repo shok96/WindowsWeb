@@ -1,0 +1,9 @@
+.terminal-line.command {
+  color: var(--text-secondary);
+}
+
+.terminal-line.error {
+  color: #ff5555; /* A standard error red color */
+}
+
+

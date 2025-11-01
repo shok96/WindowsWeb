@@ -1,0 +1,84 @@
+.browser-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--bg-primary);
+}
+
+.browser-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  gap: 8px;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.browser-nav {
+  display: flex;
+  gap: 4px;
+}
+
+.browser-nav button, .go-button, .new-tab-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.browser-nav button:disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+}
+
+.browser-nav button:hover:not(:disabled), .go-button:hover, .new-tab-button:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.url-bar {
+  flex-grow: 1;
+  height: 32px;
+  padding: 0 12px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.url-bar:focus {
+  border-color: var(--accent-color);
+}
+
+.browser-content-wrapper {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.browser-iframe {
+  width: 100%;
+  flex-grow: 1; /* Changed from height: 100% */
+  border: none;
+  display: none; /* Initially hidden */
+}
+
+.browser-message {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.security-note {
+  margin-top: 20px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--bg-tertiary);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+

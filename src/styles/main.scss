@@ -1,0 +1,148 @@
+// Main Styles for Windows 11 Web OS
+@import './variables.scss';
+@import './animations.scss';
+@import './components/apps.css';
+
+// Reset and Base Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+// Scrollbar Styling (Windows 11 style)
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: 6px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+  background-clip: padding-box;
+}
+
+// Selection
+::selection {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+// Button Reset
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
+  transition: all var(--transition-speed) ease;
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+// Input Reset
+input, textarea {
+  font-family: inherit;
+  border: none;
+  outline: none;
+}
+
+// Links
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Utility Classes
+.hidden {
+  display: none !important;
+}
+
+.visible {
+  display: block !important;
+}
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.blur-background {
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+}
+
+// Acrylic Effect (Windows 11 signature effect)
+.acrylic {
+  background: var(--bg-acrylic);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid var(--border-primary);
+}
+
+body.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+// Card Style
+.card {
+  background: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-small);
+  padding: 16px;
+}
+
+// Hover Effect for Interactive Elements
+.hover-effect {
+  transition: background-color var(--transition-speed) ease;
+  
+  &:hover {
+    background-color: var(--bg-tertiary);
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
