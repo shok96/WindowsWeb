@@ -1,5 +1,36 @@
 /**
  * WindowManager - Управление окнами в Windows 11 Web OS
+ * 
+ * === СИСТЕМНЫЕ КОНТРАКТЫ ===
+ * @system_contract: Управление всеми окнами приложений в системе
+ * @integration_contract: WindowManager ↔ ProcessManager для связи окон с процессами, WindowManager → EventBus для событий
+ * @consistency_model: Strong consistency - все операции с окнами синхронны, состояние актуально
+ * @failure_policy: Ошибки при создании/закрытии окон логируются, не прерывают выполнение
+ * @performance_contract: Создание окна < 100ms, операции фокуса O(1)
+ * 
+ * === КОМПОНЕНТНЫЕ КОНТРАКТЫ ===
+ * @component_contract: Создание, управление (focus, minimize, maximize, restore), закрытие окон
+ * @interface_contract: createWindow(), closeWindow(), focusWindow(), minimizeWindow(), maximizeWindow(), restoreWindow()
+ * @implementation_strategy: Map для хранения окон, инкрементальный zIndex для порядка отображения, связь с ProcessManager
+ * 
+ * === ФОРМАЛЬНЫЕ КОНТРАКТЫ ===
+ * @requires: ProcessManager инициализирован, EventBus доступен, container DOM элемент существует, interact.js загружен
+ * @ensures: createWindow() - окно создается с уникальным windowId, связывается с процессом через PID, генерирует событие 'window:created'
+ * @ensures: closeWindow() - окно удаляется из DOM и Map, процесс завершается через ProcessManager, фокус переключается, генерирует событие 'window:closed'
+ * @ensures: focusWindow() - окно получает максимальный zIndex, все остальные теряют фокус, генерирует событие 'window:focused'
+ * @invariant: Каждое окно связано с процессом через PID (через ProcessManager.setWindowId), windowId уникален
+ * @invariant: zIndex всегда инкрементальный, активное окно имеет максимальный zIndex
+ * @modifies: DOM через container.appendChild/removeChild, Map windows, ProcessManager, генерирует события через EventBus
+ * @throws: Ошибки при создании/закрытии окон логируются, не выбрасываются
+ * 
+ * === БИЗНЕСОВОЕ ОБОСНОВАНИЕ ===
+ * @why_requires: ProcessManager критичен для связи окон с процессами, EventBus для уведомлений
+ * @why_ensures: События window:* позволяют другим компонентам (Taskbar, TaskSwitcher) реагировать на изменения окон
+ * @why_ensures: Связь с процессом гарантирует что закрытие окна = завершение процесса
+ * @why_invariant: Уникальность windowId и связь с PID предотвращают утечки окон и процессов
+ * @why_invariant: Инкрементальный zIndex гарантирует правильный порядок отображения окон
+ * @business_impact: Нарушение ведет к неработающим окнам, утечкам памяти, некорректному управлению процессами
+ * @stakeholder_value: Пользователь может работать с окнами, порядок отображения корректен, процессы завершаются при закрытии
  */
 
 import { Window } from './Window.js';
@@ -30,6 +61,13 @@ export class WindowManager {
    * @param {HTMLElement|string} content - Содержимое окна
    * @param {Object} options - Опции окна
    * @returns {string} ID окна
+   * 
+   * @requires: pid валиден, ProcessManager имеет процесс с этим PID, container DOM элемент доступен
+   * @ensures: Окно создается с уникальным windowId (`window-${pid}`), добавляется в DOM, связывается с процессом
+   * @ensures: Окно получает фокус, генерируется событие 'window:created', воспроизводится звук открытия
+   * @modifies: DOM (container.appendChild), Map windows, ProcessManager (setWindowId), генерирует события
+   * @why_ensures: Связь с процессом критична для корректного cleanup при закрытии окна
+   * @business_impact: Ошибка создания окна = приложение не может отобразиться
    */
   createWindow(pid, title, content, options = {}) {
     const windowId = `window-${pid}`;
@@ -75,6 +113,13 @@ export class WindowManager {
    * Закрытие окна
    * @param {string} windowId - ID окна
    * @param {number} pid - PID процесса
+   * 
+   * @requires: windowId существует в windows Map
+   * @ensures: Окно удаляется из DOM и Map, процесс завершается через ProcessManager.killProcess()
+   * @ensures: Фокус переключается на другое окно (если есть), генерируется событие 'window:closed', воспроизводится звук
+   * @modifies: DOM (удаление окна), Map windows, ProcessManager (killProcess), activeWindow
+   * @why_ensures: Завершение процесса гарантирует cleanup ресурсов приложения
+   * @business_impact: Ошибка закрытия = утечка памяти и неосвобожденные процессы
    */
   closeWindow(windowId, pid) {
     const window = this.windows.get(windowId);

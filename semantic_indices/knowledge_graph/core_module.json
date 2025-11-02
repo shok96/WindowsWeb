@@ -1,0 +1,227 @@
+{
+  "module": "core_module",
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-02T18:51:00Z",
+  "description": "Ядро системы AndlancerOS - базовые сервисы и менеджеры для управления состоянием, событиями, файлами и процессами",
+  "components": {
+    "StorageManager": {
+      "file": "src/core/StorageManager.js",
+      "type": "service",
+      "responsibility": "Управление localStorage для сохранения и загрузки данных системы",
+      "dependencies": ["localStorage API"],
+      "provides": ["save()", "load()", "update()", "get()", "export()", "import()", "clear()", "getStorageSize()"],
+      "key_contracts": {
+        "@system_contract": "Гарантирует персистентность данных системы между сессиями",
+        "@component_contract": "Предоставляет единый интерфейс для работы с localStorage",
+        "@requires": "localStorage доступен в браузере",
+        "@ensures": "Данные сохраняются и загружаются корректно, обработка ошибок QuotaExceededError",
+        "@modifies": "localStorage ключ 'andlanceros'"
+      },
+      "integration_points": [
+        "FileSystem использует для сохранения файловой системы",
+        "ThemeManager использует для сохранения настроек темы",
+        "LanguageManager использует для сохранения выбранного языка"
+      ],
+      "code_smells": [],
+      "architectural_patterns": ["Singleton через единственный экземпляр в системе"]
+    },
+    "FileSystem": {
+      "file": "src/core/FileSystem.js",
+      "type": "service",
+      "responsibility": "Виртуальная файловая система с операциями CRUD над файлами и папками",
+      "dependencies": ["StorageManager", "EventBus"],
+      "provides": [
+        "createFile()", "createFolder()", "deleteItem()", "renameItem()", 
+        "copyItem()", "moveItem()", "navigateToPath()", "getFileContent()",
+        "updateFileContent()", "listDirectory()", "getItemInfo()", "search()",
+        "getFolderSize()"
+      ],
+      "key_contracts": {
+        "@system_contract": "Виртуальная файловая система с сохранением в localStorage",
+        "@component_contract": "CRUD операции над файлами и папками",
+        "@requires": "StorageManager инициализирован, EventBus доступен",
+        "@ensures": "Все операции файловой системы атомарны, системные файлы защищены от удаления",
+        "@invariant": "Структура файловой системы всегда валидна (type: 'file' | 'folder', children существует для папок)",
+        "@modifies": "StorageManager.data.fileSystem",
+        "@throws": "Ошибки при навигации, создании файлов с существующими именами"
+      },
+      "integration_points": [
+        "Desktop использует для отображения файлов на рабочем столе",
+        "FileExplorer использует для операций с файлами",
+        "Terminal использует для файловых команд",
+        "Notepad использует для чтения/записи файлов"
+      ],
+      "code_smells": [],
+      "architectural_patterns": ["Tree структура для иерархии файлов", "Event-driven через EventBus"]
+    },
+    "ProcessManager": {
+      "file": "src/core/ProcessManager.js",
+      "type": "service",
+      "responsibility": "Управление жизненным циклом процессов (приложений) с отслеживанием ресурсов",
+      "dependencies": ["EventBus"],
+      "provides": [
+        "startProcess()", "killProcess()", "getProcess()", "getAllProcesses()",
+        "getProcessesByName()", "isAppRunning()", "updateProcessStats()",
+        "setWindowId()", "getProcessByWindowId()", "getProcessUptime()",
+        "getUptime()", "getSystemStats()"
+      ],
+      "key_contracts": {
+        "@system_contract": "Управление жизненным циклом всех процессов системы",
+        "@component_contract": "Отслеживание процессов, статистики ресурсов, связь с окнами",
+        "@requires": "EventBus инициализирован",
+        "@ensures": "Каждый процесс имеет уникальный PID, процессы корректно завершаются с cleanup",
+        "@invariant": "PID всегда уникален и инкрементальный, процессы в Map хранятся актуально",
+        "@modifies": "Map процессов, вызывает destroy() на компонентах при завершении",
+        "@throws": "Ошибки при cleanup компонентов или закрытии окон"
+      },
+      "integration_points": [
+        "WindowManager использует для связи окон с процессами",
+        "TaskManager использует для отображения процессов",
+        "Taskbar использует для отображения запущенных приложений"
+      ],
+      "code_smells": [],
+      "architectural_patterns": ["Process lifecycle management", "Observer через EventBus"]
+    },
+    "EventBus": {
+      "file": "src/core/EventBus.js",
+      "type": "service",
+      "responsibility": "Глобальная система событий Pub/Sub для коммуникации между компонентами",
+      "dependencies": [],
+      "provides": ["on()", "off()", "emit()", "once()", "removeAllListeners()", "listenerCount()", "eventNames()"],
+      "key_contracts": {
+        "@system_contract": "Централизованная система событий для слабой связанности компонентов",
+        "@component_contract": "Pub/Sub паттерн с поддержкой множественных подписчиков",
+        "@requires": "Нет внешних зависимостей",
+        "@ensures": "События доставляются всем подписчикам, ошибки в обработчиках не прерывают другие",
+        "@invariant": "События всегда обрабатываются, даже при ошибках в callback",
+        "@modifies": "Внутренний объект events, глобальное состояние коммуникации",
+        "@throws": "Ошибки логируются, не прерывают выполнение других обработчиков"
+      },
+      "integration_points": [
+        "Используется всеми компонентами системы для коммуникации",
+        "Main.js использует для оркестрации событий системы"
+      ],
+      "code_smells": [],
+      "architectural_patterns": ["Pub/Sub", "Event-driven architecture", "Observer"]
+    },
+    "ThemeManager": {
+      "file": "src/core/ThemeManager.js",
+      "type": "service",
+      "responsibility": "Управление темами, обоями и персонализацией интерфейса",
+      "dependencies": ["StorageManager", "EventBus"],
+      "provides": [
+        "setTheme()", "getTheme()", "toggleTheme()", "setWallpaper()", "getWallpaper()",
+        "setAccentColor()", "getAccentColor()", "setTextColor()", "getTextColor()",
+        "setBorderColor()", "getBorderColor()", "resetPersonalization()"
+      ],
+      "key_contracts": {
+        "@system_contract": "Единая система персонализации интерфейса",
+        "@component_contract": "Управление CSS переменными и сохранение настроек",
+        "@requires": "StorageManager инициализирован, EventBus доступен",
+        "@ensures": "Темы применяются мгновенно, настройки сохраняются, CSS переменные обновляются",
+        "@invariant": "Текущая тема всегда валидна ('light' | 'dark'), цвета в формате HEX",
+        "@modifies": "document.documentElement стили и атрибуты, StorageManager.data.settings",
+        "@throws": "Предупреждения при невалидных форматах цветов"
+      },
+      "integration_points": [
+        "Settings использует для изменения персонализации",
+        "Desktop использует для применения обоев",
+        "Все компоненты используют CSS переменные для тем"
+      ],
+      "code_smells": [],
+      "architectural_patterns": ["Strategy для тем", "Observer через EventBus"]
+    },
+    "LanguageManager": {
+      "file": "src/core/LanguageManager.js",
+      "type": "service",
+      "responsibility": "Управление локализацией и загрузкой языковых файлов",
+      "dependencies": ["StorageManager", "EventBus"],
+      "provides": ["load()", "getString()", "getLanguage()", "setLanguage()"],
+      "key_contracts": {
+        "@system_contract": "Многоязычная поддержка системы",
+        "@component_contract": "Загрузка и предоставление локализованных строк",
+        "@requires": "StorageManager инициализирован, EventBus доступен, файлы локализации существуют",
+        "@ensures": "Языковые файлы загружаются, fallback на ru при ошибках, строки доступны через getString()",
+        "@invariant": "currentLang всегда валиден, locales объект всегда инициализирован",
+        "@modifies": "this.locales, StorageManager.data.settings.language",
+        "@throws": "Ошибки загрузки языковых файлов с fallback на русский"
+      },
+      "integration_points": [
+        "Все компоненты используют getString() для локализации",
+        "Settings использует для смены языка"
+      ],
+      "code_smells": [],
+      "architectural_patterns": ["Singleton", "Lazy loading локализаций"]
+    },
+    "FileAssociation": {
+      "file": "src/core/FileAssociation.js",
+      "type": "service",
+      "responsibility": "Связывание расширений файлов с приложениями для автоматического открытия",
+      "dependencies": ["EventBus"],
+      "provides": ["getApplicationForExtension()", "openFile()", "openFileWith()"],
+      "key_contracts": {
+        "@system_contract": "Ассоциации файлов с приложениями для автоматического открытия",
+        "@component_contract": "Маппинг расширений на приложения и запуск через EventBus",
+        "@requires": "EventBus инициализирован, FileSystem доступен через window.app",
+        "@ensures": "Файлы открываются правильным приложением, системные команды исполняются",
+        "@invariant": "associations и appLaunchers всегда синхронизированы",
+        "@modifies": "Генерирует события app:open через EventBus",
+        "@throws": "Ошибки при отсутствии приложения для расширения"
+      },
+      "integration_points": [
+        "Desktop использует для открытия файлов двойным кликом",
+        "FileExplorer использует для открытия файлов",
+        "FileSystem использует для определения приложения"
+      ],
+      "code_smells": [],
+      "architectural_patterns": ["Registry pattern для ассоциаций", "Command через EventBus"]
+    },
+    "SoundManager": {
+      "file": "src/core/SoundManager.js",
+      "type": "service",
+      "responsibility": "Управление системными звуками",
+      "dependencies": [],
+      "integration_points": [
+        "Используется при перезагрузке, выключении, системных событиях"
+      ]
+    },
+    "Utils": {
+      "file": "src/core/Utils.js",
+      "type": "utility",
+      "responsibility": "Вспомогательные функции и утилиты",
+      "dependencies": []
+    }
+  },
+  "patterns": [
+    "Singleton для менеджеров",
+    "Pub/Sub через EventBus",
+    "Dependency Injection через конструкторы",
+    "Event-driven architecture"
+  ],
+  "relationships": {
+    "StorageManager": {
+      "used_by": ["FileSystem", "ThemeManager", "LanguageManager"]
+    },
+    "EventBus": {
+      "used_by": ["FileSystem", "ProcessManager", "ThemeManager", "LanguageManager", "FileAssociation", "Все компоненты"]
+    },
+    "FileSystem": {
+      "uses": ["StorageManager", "EventBus"],
+      "used_by": ["Desktop", "FileExplorer", "Terminal", "Notepad"]
+    },
+    "ProcessManager": {
+      "uses": ["EventBus"],
+      "used_by": ["WindowManager", "TaskManager", "Taskbar", "Main"]
+    }
+  },
+  "technical_debt": [],
+  "business_documentation": {
+    "purpose": "Ядро системы обеспечивает базовую функциональность: персистентность данных, управление процессами, коммуникацию компонентов и персонализацию интерфейса",
+    "critical_features": [
+      "Сохранение состояния между сессиями",
+      "Виртуальная файловая система",
+      "Управление процессами приложений",
+      "Событийная архитектура для слабой связанности"
+    ]
+  }
+}

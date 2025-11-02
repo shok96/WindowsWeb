@@ -1,5 +1,32 @@
 /**
  * SoundManager.js - Менеджер звуков системы
+ * 
+ * === СИСТЕМНЫЕ КОНТРАКТЫ ===
+ * @system_contract: Управление системными звуками через Web Audio API
+ * @integration_contract: SoundManager используется через getSoundManager() singleton
+ * @consistency_model: Eventual consistency - звуки воспроизводятся асинхронно
+ * @failure_policy: Ошибки логируются в console.warn, не прерывают выполнение
+ * @performance_contract: Воспроизведение звуков неблокирующее, использует Web Audio API
+ * 
+ * === КОМПОНЕНТНЫЕ КОНТРАКТЫ ===
+ * @component_contract: Воспроизведение звуков через Web Audio API и HTML5 Audio
+ * @interface_contract: playTone(), playSound(), playSystemStart(), playSystemShutdown(), setEnabled(), setVolume()
+ * @implementation_strategy: Singleton через getSoundManager(), опциональное воспроизведение через enabled флаг
+ * 
+ * === ФОРМАЛЬНЫЕ КОНТРАКТЫ ===
+ * @requires: Web Audio API доступен в браузере (AudioContext или webkitAudioContext)
+ * @ensures: playTone() - воспроизводит тон если enabled=true, ошибки обрабатываются молча
+ * @ensures: setVolume() - ограничивает значение между 0 и 1
+ * @invariant: enabled всегда булево значение, volume всегда в диапазоне [0, 1]
+ * @modifies: Генерирует звуки через Web Audio API, не изменяет состояние системы
+ * @throws: Ошибки Web Audio API перехватываются, логируются в console.warn
+ * 
+ * === БИЗНЕСОВОЕ ОБОСНОВАНИЕ ===
+ * @why_requires: Web Audio API нужен для программного генерации звуков
+ * @why_ensures: Молчаливая обработка ошибок гарантирует что отсутствие звука не ломает систему
+ * @why_invariant: Валидация volume предотвращает некорректное воспроизведение
+ * @business_impact: Нарушение ведет к отсутствию звуковых эффектов (не критично)
+ * @stakeholder_value: Пользователь получает звуковую обратную связь при взаимодействии
  */
 
 export class SoundManager {

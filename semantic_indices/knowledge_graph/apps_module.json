@@ -1,0 +1,185 @@
+{
+  "module": "apps_module",
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-02T18:51:00Z",
+  "description": "Приложения AndlancerOS - пользовательские приложения системы",
+  "components": {
+    "FileExplorer": {
+      "file": "src/apps/FileExplorer/FileExplorer.js",
+      "type": "app",
+      "responsibility": "Проводник файлов для управления файловой системой",
+      "dependencies": ["FileSystem", "FileAssociation", "LanguageManager"],
+      "key_contracts": {
+        "@component_contract": "UI для операций с файлами и папками",
+        "@requires": "FileSystem инициализирован, FileAssociation доступен",
+        "@ensures": "Отображает файловую систему, поддерживает CRUD операции через UI"
+      },
+      "integration_points": ["Использует FileSystem для всех операций", "Использует FileAssociation для открытия файлов"]
+    },
+    "Notepad": {
+      "file": "src/apps/Notepad/Notepad.js",
+      "type": "app",
+      "responsibility": "Текстовый редактор",
+      "dependencies": ["FileSystem", "LanguageManager"],
+      "key_contracts": {
+        "@component_contract": "Редактирование текстовых файлов",
+        "@requires": "FileSystem доступен",
+        "@ensures": "Читает и сохраняет файлы через FileSystem"
+      }
+    },
+    "Terminal": {
+      "file": "src/apps/Terminal/Terminal.js",
+      "type": "app",
+      "responsibility": "Терминал командной строки",
+      "dependencies": ["FileSystem", "LanguageManager", "systemCommands"],
+      "key_contracts": {
+        "@component_contract": "Выполнение системных команд",
+        "@requires": "FileSystem доступен, systemCommands загружены",
+        "@ensures": "Команды выполняются корректно, результат отображается"
+      }
+    },
+    "TaskManager": {
+      "file": "src/apps/TaskManager/TaskManager.js",
+      "type": "app",
+      "responsibility": "Диспетчер задач для управления процессами",
+      "dependencies": ["ProcessManager"],
+      "key_contracts": {
+        "@component_contract": "Отображение и управление процессами",
+        "@requires": "ProcessManager доступен",
+        "@ensures": "Показывает актуальную статистику процессов, может завершать процессы"
+      }
+    },
+    "Settings": {
+      "file": "src/apps/Settings/Settings.js",
+      "type": "app",
+      "responsibility": "Настройки системы",
+      "dependencies": ["ThemeManager", "StorageManager", "LanguageManager"],
+      "key_contracts": {
+        "@component_contract": "Управление настройками системы",
+        "@requires": "ThemeManager, StorageManager, LanguageManager доступны",
+        "@ensures": "Изменения настроек применяются и сохраняются"
+      }
+    },
+    "Browser": {
+      "file": "src/apps/Browser/Browser.js",
+      "type": "app",
+      "responsibility": "Веб-браузер с iframe",
+      "dependencies": [],
+      "key_contracts": {
+        "@component_contract": "Навигация по веб-сайтам через iframe",
+        "@requires": "Нет внешних зависимостей",
+        "@ensures": "Отображает веб-страницы, некоторые сайты могут блокировать iframe"
+      }
+    },
+    "Calculator": {
+      "file": "src/apps/Calculator/Calculator.js",
+      "type": "app",
+      "responsibility": "Калькулятор",
+      "dependencies": ["LanguageManager"],
+      "key_contracts": {
+        "@component_contract": "Выполнение математических вычислений"
+      }
+    },
+    "Calendar": {
+      "file": "src/apps/Calendar/Calendar.js",
+      "type": "app",
+      "responsibility": "Календарь",
+      "dependencies": [],
+      "key_contracts": {
+        "@component_contract": "Отображение календаря"
+      }
+    },
+    "Games": {
+      "components": ["Minesweeper", "Snake", "Tetris", "Doom"],
+      "type": "app",
+      "responsibility": "Игры",
+      "dependencies": [],
+      "note": "Игровые приложения не имеют критических зависимостей"
+    },
+    "CodeEditor": {
+      "file": "src/apps/CodeEditor/CodeEditor.js",
+      "type": "app",
+      "responsibility": "Редактор кода с подсветкой синтаксиса",
+      "dependencies": ["LanguageManager"],
+      "key_contracts": {
+        "@component_contract": "Редактирование кода с поддержкой Monaco Editor"
+      }
+    },
+    "VisualIDE": {
+      "file": "src/apps/VisualIDE/VisualIDE.js",
+      "type": "app",
+      "responsibility": "Визуальный редактор потоков",
+      "dependencies": ["LanguageManager", "drawflow"],
+      "key_contracts": {
+        "@component_contract": "Визуальное программирование через блок-схемы"
+      }
+    },
+    "Paint": {
+      "file": "src/apps/Paint/Paint.js",
+      "type": "app",
+      "responsibility": "Графический редактор",
+      "dependencies": ["LanguageManager"],
+      "key_contracts": {
+        "@component_contract": "Рисование и редактирование изображений"
+      }
+    },
+    "AudioPlayer": {
+      "file": "src/apps/AudioPlayer/AudioPlayer.js",
+      "type": "app",
+      "responsibility": "Аудио плеер",
+      "dependencies": [],
+      "key_contracts": {
+        "@component_contract": "Воспроизведение аудио файлов"
+      }
+    },
+    "BSOD": {
+      "file": "src/apps/BSOD/BSOD.js",
+      "type": "app",
+      "responsibility": "Экран синего экрана смерти",
+      "dependencies": [],
+      "key_contracts": {
+        "@component_contract": "Отображение критической ошибки системы",
+        "@requires": "Вызывается при системных ошибках или через destroy_system.aos",
+        "@ensures": "Блокирует интерфейс, показывает сообщение об ошибке"
+      },
+      "integration_points": ["FileAssociation открывает через aosExecutor", "Main.js вызывает при системных ошибках"]
+    },
+    "Camera": {
+      "file": "src/apps/Camera/Camera.js",
+      "type": "app",
+      "responsibility": "Приложение для работы с камерой и микрофоном",
+      "dependencies": ["FileSystem"],
+      "key_contracts": {
+        "@component_contract": "Предоставляет UI для просмотра потока с камеры, создания фотографий, записи видео и визуализации аудио.",
+        "@requires": "Браузер пользователя поддерживает navigator.mediaDevices.getUserMedia(), AudioContext и MediaRecorder API. Пользователь предоставил разрешение на доступ к камере и микрофону.",
+        "@ensures": "Приложение отображает видеопоток, если получено разрешение. Фотографии и видео могут быть сохранены в виртуальной файловой системе."
+      },
+      "integration_points": ["Использует FileSystem для сохранения файлов."]
+    }
+  },
+  "patterns": [
+    "App pattern - все приложения имеют render() метод",
+    "Dependency injection через параметры render()",
+    "Event-driven через EventBus для коммуникации"
+  ],
+  "relationships": {
+    "FileExplorer": {
+      "uses": ["FileSystem", "FileAssociation"],
+      "critical_for": ["Desktop"]
+    },
+    "Settings": {
+      "uses": ["ThemeManager", "StorageManager", "LanguageManager"],
+      "critical_for": ["Персонализация системы"]
+    }
+  },
+  "technical_debt": [],
+  "business_documentation": {
+    "purpose": "Приложения предоставляют пользовательскую функциональность системы",
+    "critical_features": [
+      "Файловые операции через FileExplorer",
+      "Редактирование текста через Notepad",
+      "Управление процессами через TaskManager",
+      "Настройки системы через Settings"
+    ]
+  }
+}

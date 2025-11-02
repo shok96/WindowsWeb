@@ -70,6 +70,8 @@
     "app_visualide_desc": "Visual Integrated Development Environment",
     "app_doom_name": "DOOM",
     "app_doom_desc": "Classic first-person shooter",
+    "app_camera_name": "Camera",
+    "app_camera_desc": "Capture photos and videos",
 
     "active_windows": "Active Windows",
     "language": "Language",

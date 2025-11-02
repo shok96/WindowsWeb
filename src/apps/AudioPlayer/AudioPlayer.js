@@ -141,51 +141,57 @@ export class AudioPlayer {
         if (files.length > 0 && !this.isPlaying) {
             this.currentTrackIndex = this.playlist.length - newTracks.length;
             this.loadTrack(this.currentTrackIndex);
+            this.togglePlayPause();
         }
     }
 
     loadTrack(index) {
-        const file = this.playlist[index];
-        const fileURL = URL.createObjectURL(file);
-        this.audioElement.src = fileURL;
+        const track = this.playlist[index];
+        if (!track) return;
         
-        this.audioElement.play().then(() => {
-            this.isPlaying = true;
-            this.updatePlayPauseButton();
-        }).catch(e => console.error("Playback failed:", e));
+        this.currentTrackIndex = index;
+        this.audioElement.src = track.url;
+        this.updateTrackInfo();
 
+        if (this.isPlaying) {
+            const playPromise = this.audioElement.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.error("Audio playback failed:", error);
+                    this.isPlaying = false;
+                    this.updatePlayPauseButton();
+                });
+            }
+        }
+    }
+
+    readLocalFileMetadata(file) {
         const container = document.querySelector('.audio-player-app');
+        if (!container) return;
         const titleEl = container.querySelector('.track-info .title');
         const artistEl = container.querySelector('.track-info .artist');
         const artworkEl = container.querySelector('.artwork-img');
 
         // Reset to defaults
-        titleEl.textContent = file.name;
+        titleEl.textContent = file.name.replace(/\.[^/.]+$/, "");;
         artistEl.textContent = 'Unknown Artist';
         artworkEl.src = this.defaultArtwork;
 
         // Read metadata using jsmediatags
         window.jsmediatags.read(file, {
             onSuccess: (tag) => {
-                console.log(tag);
                 const { title, artist, picture } = tag.tags;
-                if (title) {
-                    titleEl.textContent = title;
-                }
-                if (artist) {
-                    artistEl.textContent = artist;
-                }
+                if (title) titleEl.textContent = title;
+                if (artist) artistEl.textContent = artist;
                 if (picture) {
                     const base64String = btoa(String.fromCharCode.apply(null, picture.data));
                     artworkEl.src = `data:${picture.format};base64,${base64String}`;
                 }
             },
             onError: (error) => {
-                console.error('Error reading metadata:', error);
+                console.log('Could not read metadata for', file.name);
             }
         });
-        
-        this.audioElement.ontimeupdate = () => this.updateProgressBar();
     }
     
     updateTrackInfo() {

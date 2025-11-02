@@ -1,0 +1,182 @@
+{
+  "module": "components_module",
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-02T18:51:00Z",
+  "description": "UI компоненты системы AndlancerOS",
+  "components": {
+    "Desktop": {
+      "file": "src/components/Desktop/Desktop.js",
+      "type": "component",
+      "responsibility": "Рабочий стол с иконками и контекстным меню",
+      "dependencies": ["FileSystem", "ThemeManager", "EventBus", "FileAssociation", "ProcessManager", "LanguageManager"],
+      "key_contracts": {
+        "@component_contract": "Отображение рабочего стола с файлами и иконками",
+        "@requires": "FileSystem, ThemeManager, EventBus инициализированы",
+        "@ensures": "Отображает файлы с Desktop, поддерживает контекстное меню, открытие файлов",
+        "@modifies": "DOM рабочего стола, генерирует события через EventBus"
+      },
+      "integration_points": [
+        "Использует FileSystem для получения файлов Desktop",
+        "Использует ThemeManager для обоев",
+        "Использует FileAssociation для открытия файлов",
+        "Использует ProcessManager для запуска приложений"
+      ]
+    },
+    "Taskbar": {
+      "file": "src/components/Taskbar/Taskbar.js",
+      "type": "component",
+      "responsibility": "Панель задач с кнопками приложений",
+      "dependencies": ["ProcessManager", "EventBus", "LanguageManager", "NotificationManager"],
+      "key_contracts": {
+        "@component_contract": "Отображение запущенных процессов и уведомлений",
+        "@requires": "ProcessManager доступен",
+        "@ensures": "Показывает кнопки запущенных приложений, центр уведомлений, системные часы"
+      },
+      "integration_points": ["ProcessManager для списка процессов", "NotificationManager для уведомлений"]
+    },
+    "StartMenu": {
+      "file": "src/components/StartMenu/StartMenu.js",
+      "type": "component",
+      "responsibility": "Меню Пуск с приложениями",
+      "dependencies": ["EventBus", "LanguageManager"],
+      "key_contracts": {
+        "@component_contract": "Отображение списка приложений и системных команд",
+        "@requires": "EventBus доступен, defaultApps загружены",
+        "@ensures": "Показывает приложения, генерирует события app:open при клике"
+      },
+      "integration_points": ["Генерирует app:open события через EventBus"]
+    },
+    "WindowManager": {
+      "file": "src/components/Window/WindowManager.js",
+      "type": "component",
+      "responsibility": "Менеджер окон с drag & drop и resize",
+      "dependencies": ["ProcessManager", "EventBus"],
+      "key_contracts": {
+        "@system_contract": "Управление всеми окнами приложений",
+        "@component_contract": "Создание, перемещение, изменение размера окон",
+        "@requires": "ProcessManager инициализирован, interact.js загружен",
+        "@ensures": "Окна корректно создаются, перемещаются, ресайзятся, фокусируются",
+        "@invariant": "Каждое окно связано с процессом через PID",
+        "@modifies": "DOM окон, состояние ProcessManager",
+        "@throws": "Ошибки при создании окон или взаимодействии с ProcessManager"
+      },
+      "integration_points": [
+        "ProcessManager для связи окон с процессами",
+        "Использует interact.js для drag & drop",
+        "Все приложения создают окна через WindowManager"
+      ]
+    },
+    "Window": {
+      "file": "src/components/Window/Window.js",
+      "type": "component",
+      "responsibility": "Компонент окна приложения",
+      "dependencies": [],
+      "key_contracts": {
+        "@component_contract": "Отдельное окно с заголовком и управлением",
+        "@requires": "CSS стили загружены",
+        "@ensures": "Окно отображается с корректными стилями и управлением"
+      }
+    },
+    "LoginScreen": {
+      "file": "src/components/LoginScreen/LoginScreen.js",
+      "type": "component",
+      "responsibility": "Экран входа в систему",
+      "dependencies": ["EventBus", "LanguageManager"],
+      "key_contracts": {
+        "@component_contract": "Аутентификация пользователя",
+        "@requires": "EventBus доступен",
+        "@ensures": "Генерирует login:success событие при успешном входе"
+      }
+    },
+    "BootScreens": {
+      "components": [
+        "PowerOnScreen",
+        "BootScreen",
+        "BIOS",
+        "OSSelectionScreen",
+        "SystemLoadingScreen",
+        "ShutdownScreen"
+      ],
+      "type": "component",
+      "responsibility": "Экраны загрузки и выключения системы",
+      "dependencies": ["LanguageManager", "EventBus"],
+      "key_contracts": {
+        "@component_contract": "Визуализация процесса загрузки/выключения",
+        "@requires": "LanguageManager доступен для локализации",
+        "@ensures": "Отображают процесс загрузки, генерируют события перехода"
+      }
+    },
+    "Dialog": {
+      "file": "src/components/Dialog/Dialog.js",
+      "type": "component",
+      "responsibility": "Диалоговые окна",
+      "dependencies": [],
+      "key_contracts": {
+        "@component_contract": "Модальные диалоги (confirm, alert, prompt)",
+        "@ensures": "Отображает диалоги с кнопками, возвращает результат"
+      }
+    },
+    "Notification": {
+      "file": "src/components/Notification/Notification.js",
+      "type": "component",
+      "responsibility": "Система уведомлений",
+      "dependencies": ["LanguageManager"],
+      "key_contracts": {
+        "@component_contract": "Показ уведомлений пользователю",
+        "@requires": "LanguageManager доступен",
+        "@ensures": "Уведомления отображаются и автоматически скрываются"
+      },
+      "integration_points": ["Используется всеми компонентами для показа ошибок и предупреждений"]
+    },
+    "TaskSwitcher": {
+      "file": "src/components/TaskSwitcher/TaskSwitcher.js",
+      "type": "component",
+      "responsibility": "Переключение между задачами (Alt+Tab)",
+      "dependencies": ["WindowManager", "EventBus", "LanguageManager"],
+      "key_contracts": {
+        "@component_contract": "Переключение между окнами по Alt+Tab",
+        "@requires": "WindowManager доступен",
+        "@ensures": "Показывает список окон, переключает фокус"
+      }
+    },
+    "ContextMenu": {
+      "file": "src/components/ContextMenu/ContextMenu.js",
+      "type": "component",
+      "responsibility": "Контекстное меню",
+      "dependencies": [],
+      "key_contracts": {
+        "@component_contract": "Показ контекстного меню по правому клику",
+        "@ensures": "Отображает меню в позиции клика, обрабатывает выбор"
+      }
+    }
+  },
+  "patterns": [
+    "Component pattern - все компоненты имеют render() метод",
+    "Event-driven через EventBus",
+    "Dependency injection через конструкторы"
+  ],
+  "relationships": {
+    "Desktop": {
+      "uses": ["FileSystem", "ThemeManager", "FileAssociation", "ProcessManager"],
+      "critical_for": ["Основной UI системы"]
+    },
+    "WindowManager": {
+      "uses": ["ProcessManager"],
+      "critical_for": ["Все приложения"]
+    },
+    "Taskbar": {
+      "uses": ["ProcessManager"],
+      "critical_for": ["Навигация по приложениям"]
+    }
+  },
+  "technical_debt": [],
+  "business_documentation": {
+    "purpose": "UI компоненты обеспечивают пользовательский интерфейс системы",
+    "critical_features": [
+      "Рабочий стол с файлами",
+      "Панель задач и меню Пуск",
+      "Управление окнами",
+      "Система уведомлений"
+    ]
+  }
+}

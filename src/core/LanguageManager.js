@@ -1,3 +1,36 @@
+/**
+ * LanguageManager - Управление локализацией для Windows 11 Web OS
+ * Загрузка и предоставление локализованных строк
+ * 
+ * === СИСТЕМНЫЕ КОНТРАКТЫ ===
+ * @system_contract: Многоязычная поддержка системы
+ * @integration_contract: LanguageManager ↔ StorageManager для сохранения выбранного языка, LanguageManager → EventBus для уведомлений
+ * @consistency_model: Strong consistency - язык загружается перед инициализацией UI
+ * @failure_policy: Fallback на 'ru' при ошибках загрузки, показываются уведомления об ошибках
+ * @performance_contract: Загрузка языкового файла асинхронная, getString() O(1)
+ * 
+ * === КОМПОНЕНТНЫЕ КОНТРАКТЫ ===
+ * @component_contract: Загрузка и предоставление локализованных строк через getString()
+ * @interface_contract: load(), getString(key, fallback), getLanguage(), setLanguage(lang, requireReboot)
+ * @implementation_strategy: Загрузка JSON файлов через fetch, кэширование в this.locales
+ * 
+ * === ФОРМАЛЬНЫЕ КОНТРАКТЫ ===
+ * @requires: StorageManager инициализирован, EventBus доступен, файлы локализации существуют в src/locales/
+ * @ensures: load() - загружает языковой файл, fallback на 'ru' при ошибке, генерирует событие 'language:loaded'
+ * @ensures: getString() - возвращает локализованную строку или fallback, всегда возвращает строку (не null/undefined)
+ * @invariant: currentLang всегда валиден, locales объект всегда инициализирован (может быть пустым до загрузки)
+ * @modifies: this.locales, StorageManager.data.settings.language, генерирует события через EventBus
+ * @throws: Ошибки загрузки языковых файлов обрабатываются с fallback, уведомления через EventBus
+ * 
+ * === БИЗНЕСОВОЕ ОБОСНОВАНИЕ ===
+ * @why_requires: StorageManager критичен для сохранения выбранного языка пользователя
+ * @why_ensures: Fallback на русский гарантирует что система всегда работает даже при ошибках
+ * @why_ensures: getString() всегда возвращает строку предотвращает ошибки отображения
+ * @why_invariant: Валидный currentLang гарантирует что загрузка всегда возможна
+ * @business_impact: Нарушение ведет к отображению ключей вместо текста или ошибкам загрузки
+ * @stakeholder_value: Пользователь видит интерфейс на выбранном языке
+ */
+
 import { showDialog } from '../components/Dialog/Dialog.js';
 
 export class LanguageManager {

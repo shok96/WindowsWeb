@@ -246,6 +246,21 @@ export const defaultApps = [
       fullscreen: true,
       noHeader: true
     }
+  },
+  {
+    id: 'Camera',
+    name: 'app_camera_name',
+    icon: '📷',
+    description: 'app_camera_desc',
+    category: 'media',
+    pinned: true,
+    window: {
+      width: 800,
+      height: 600,
+      minWidth: 600,
+      minHeight: 400,
+      resizable: true
+    }
   }
 ];
 

@@ -1,5 +1,33 @@
 /**
  * Main.js - Точка входа Windows 11 Web OS
+ * 
+ * === СИСТЕМНЫЕ КОНТРАКТЫ ===
+ * @system_contract: Инициализирует и координирует всю систему AndlancerOS
+ * @integration_contract: Оркестрирует все модули: core ↔ apps ↔ components
+ * @consistency_model: Strong consistency - инициализация последовательна, состояние синхронно
+ * @failure_policy: Ошибки перехватываются через setupErrorHandling(), показываются через Notification
+ * @performance_contract: Инициализация должна завершаться < 2 секунд, hot path (openApp) < 100ms
+ * 
+ * === КОМПОНЕНТНЫЕ КОНТРАКТЫ ===
+ * @component_contract: Главный оркестратор компонентов, управление жизненным циклом системы
+ * @interface_contract: init(), openApp(appId, params), lifecycle методы (showPowerOnScreen, showDesktop, etc.)
+ * @implementation_strategy: Dependency injection через конструкторы, EventBus для коммуникации
+ * 
+ * === ФОРМАЛЬНЫЕ КОНТРАКТЫ ===
+ * @requires: DOM готов, все импорты загружены, HTML содержит необходимые контейнеры
+ * @ensures: init() - все core модули инициализированы в правильном порядке, UI компоненты созданы
+ * @ensures: openApp() - приложение запускается через ProcessManager и WindowManager, окно создается
+ * @invariant: Порядок инициализации: StorageManager → EventBus → LanguageManager → FileSystem → ProcessManager → ThemeManager
+ * @invariant: UI компоненты создаются только после инициализации core модулей
+ * @modifies: Глобальное состояние через window.app, DOM структура через контейнеры
+ * @throws: Ошибки инициализации обрабатываются через Notification, системные ошибки показывают BSOD
+ * 
+ * === БИЗНЕСОВОЕ ОБОСНОВАНИЕ ===
+ * @why_requires: Правильный порядок инициализации критичен для зависимостей между модулями
+ * @why_ensures: Последовательная инициализация гарантирует что компоненты получают валидные зависимости
+ * @why_invariant: Порядок инициализации core модулей определяет доступность зависимостей для UI
+ * @business_impact: Нарушение порядка ведет к ошибкам инициализации и неработающей системе
+ * @stakeholder_value: Пользователь видит рабочую систему после загрузки
  */
 
 // Import main SCSS file
@@ -48,6 +76,7 @@ import { Doom } from './apps/Doom/Doom.js';
 import { AudioPlayer } from './apps/AudioPlayer/AudioPlayer.js';
 import { Tetris } from './apps/Tetris/Tetris.js';
 import { BSOD } from './apps/BSOD/BSOD.js';
+import { Camera } from './apps/Camera/Camera.js';
 
 // Data
 import { getAppConfig } from './data/defaultApps.js';
@@ -77,12 +106,31 @@ import './apps/AudioPlayer/AudioPlayer.css';
 import './apps/BSOD/BSOD.css';
 import './hakeros/HakerOs.css';
 
+/**
+ * @orchestrates: StorageManager, FileSystem, ProcessManager, EventBus, ThemeManager, LanguageManager, Desktop, Taskbar, StartMenu, WindowManager
+ * @depends_on: Все core модули, apps модули, components модули, data модули
+ */
 class AndlancerOS_Class {
+  /**
+   * Конструктор главного класса системы
+   * @requires: DOMContentLoaded событие еще не произошло (вызывается из addEventListener)
+   * @ensures: isCrashed = false, вызывается init() для инициализации
+   */
   constructor() {
     this.isCrashed = false;
     this.init();
   }
 
+  /**
+   * Инициализация системы
+   * @requires: Все импорты загружены, DOM контейнеры существуют в HTML
+   * @ensures: Все core модули инициализированы, язык загружен, контейнеры получены, приложения зарегистрированы
+   * @ensures: Система уведомлений инициализирована, обработка ошибок настроена, показывается начальный экран
+   * @invariant: Порядок инициализации core модулей не нарушается (StorageManager первый, EventBus второй)
+   * @modifies: this.storageManager, this.eventBus, this.fileSystem, etc., глобальное состояние
+   * @why_ensures: Правильная последовательность критична для работы зависимостей
+   * @business_impact: Ошибка инициализации = система не запускается
+   */
   async init() {
     // Инициализация core модулей
     this.storageManager = new StorageManager();
@@ -128,7 +176,8 @@ class AndlancerOS_Class {
       Doom,
       AudioPlayer,
       Tetris,
-      BSOD
+      BSOD,
+      Camera
     };
     
     // Инициализация системы уведомлений
@@ -266,6 +315,20 @@ class AndlancerOS_Class {
     );
   }
 
+  /**
+   * Открытие приложения
+   * @param {string} appId - ID приложения (например, 'FileExplorer', 'Notepad')
+   * @param {Object} params - Параметры для приложения (например, {filePath: 'Desktop/note.txt'})
+   * @requires: appId существует в this.apps, ProcessManager и WindowManager инициализированы
+   * @ensures: Приложение создается, процесс запускается, окно создается и отображается
+   * @ensures: Если приложение уже запущено (кроме FileExplorer), фокус переключается на существующее окно
+   * @modifies: ProcessManager (добавляет процесс), WindowManager (создает окно), DOM (добавляет окно)
+   * @throws: Ошибки при отсутствии приложения или конфигурации логируются, не блокируют систему
+   * @why_requires: apps должны быть зарегистрированы в init() перед использованием
+   * @why_ensures: Одно приложение одно окно (кроме FileExplorer) улучшает UX
+   * @business_impact: Ошибка открытия = пользователь не может запустить приложение
+   * @stakeholder_value: Пользователь может запускать приложения и работать с ними
+   */
   openApp(appId, params = {}) {
     // Особый случай для BSOD
     if (appId === 'BSOD') {
@@ -283,7 +346,7 @@ class AndlancerOS_Class {
     }
     
     // Получение конфигурации приложения
-    const appConfig = getAppConfig(appId);
+    const appConfig = getAppConfig(appId, this.languageManager);
     if (!appConfig) {
       console.error(`App config not found: ${appId}`);
       return;
@@ -308,7 +371,7 @@ class AndlancerOS_Class {
     // Рендеринг содержимого приложения
     let content;
     if (appId === 'FileExplorer') {
-      content = appInstance.render(this.fileSystem, this.fileAssociation);
+      content = appInstance.render(this.fileSystem, this.fileAssociation, this.languageManager);
     } else if (appId === 'Notepad' || appId === 'Terminal') {
       content = appInstance.render(this.fileSystem, this.languageManager);
     } else if (appId === 'Settings') {
@@ -323,6 +386,8 @@ class AndlancerOS_Class {
       content = appInstance.render(this.languageManager);
     } else if (appId === 'Calculator') {
         content = appInstance.render(this.languageManager);
+    } else if (appId === 'Camera') {
+        content = appInstance.render();
     } else {
       content = appInstance.render();
     }
@@ -337,6 +402,20 @@ class AndlancerOS_Class {
       content,
       appConfig.window
     );
+    
+    // Установка callbacks для Camera приложения
+    if (appId === 'Camera') {
+      appInstance.onFocus = () => {
+        this.windowManager.focusWindow(windowId);
+      };
+      appInstance.onKill = () => {
+        this.processManager.killProcess(pid);
+      };
+      // Обновляем обработчик клика
+      if (appInstance.elem) {
+        appInstance.elem.onclick = () => appInstance.onFocus();
+      }
+    }
     
     console.log(`App opened: ${appConfig.name} (PID: ${pid}, Window: ${windowId})`);
   }

@@ -1,6 +1,34 @@
 /**
  * ProcessManager - Управление процессами (приложениями) в Windows 11 Web OS
  * Отслеживание запущенных приложений и их ресурсов
+ * 
+ * === СИСТЕМНЫЕ КОНТРАКТЫ ===
+ * @system_contract: Управление жизненным циклом всех процессов системы
+ * @integration_contract: ProcessManager ↔ WindowManager для связи процессов с окнами, ProcessManager → EventBus для событий
+ * @consistency_model: Strong consistency - все процессы отслеживаются синхронно через Map
+ * @failure_policy: Ошибки при cleanup логируются, не прерывают завершение процесса
+ * @performance_contract: Операции O(1) для поиска по PID, O(n) для поиска по имени
+ * 
+ * === КОМПОНЕНТНЫЕ КОНТРАКТЫ ===
+ * @component_contract: Отслеживание процессов с PID, статистикой ресурсов, связью с окнами
+ * @interface_contract: startProcess(), killProcess(), getProcess(), getAllProcesses(), getProcessesByName(), isAppRunning()
+ * @implementation_strategy: Map для хранения процессов, инкрементальный PID, связь с WindowManager опциональна
+ * 
+ * === ФОРМАЛЬНЫЕ КОНТРАКТЫ ===
+ * @requires: EventBus инициализирован
+ * @ensures: startProcess() - возвращает уникальный PID, процесс добавляется в Map со статусом 'running'
+ * @ensures: killProcess() - вызывает destroy() на компоненте если есть, закрывает окно через WindowManager, генерирует событие 'process:killed'
+ * @invariant: PID всегда уникален и инкрементальный (nextPID), процессы в Map хранятся актуально
+ * @modifies: Map процессов, вызывает destroy() на компонентах, вызывает WindowManager.closeWindowByPid()
+ * @throws: Ошибки при cleanup логируются в console, не выбрасываются
+ * 
+ * === БИЗНЕСОВОЕ ОБОСНОВАНИЕ ===
+ * @why_requires: EventBus критичен для уведомлений о событиях процессов
+ * @why_ensures: Уникальный PID гарантирует что процессы можно однозначно идентифицировать
+ * @why_ensures: cleanup через destroy() и закрытие окна критичны для освобождения ресурсов
+ * @why_invariant: Инкрементальный PID гарантирует уникальность без коллизий
+ * @business_impact: Нарушение ведет к утечкам памяти, неосвобожденным окнам
+ * @stakeholder_value: Пользователь может управлять процессами, ресурсы освобождаются корректно
  */
 
 export class ProcessManager {

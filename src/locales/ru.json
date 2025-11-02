@@ -74,6 +74,8 @@
     "app_audioplayer_desc": "Воспроизведение аудиофайлов",
     "app_tetris_name": "Тетрис",
     "app_tetris_desc": "Классическая игра-головоломка",
+    "app_camera_name": "Камера",
+    "app_camera_desc": "Захват фото и видео",
     "app_bsod_desc": "Критическая системная ошибка",
 
     "active_windows": "Активные окна",

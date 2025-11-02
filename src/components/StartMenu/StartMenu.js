@@ -28,7 +28,12 @@ export class StartMenu {
         </div>
         <div class="start-footer">
           <div class="user-profile">
-            <div class="user-avatar">👤</div>
+            <div class="user-avatar">
+              <svg class="avatar-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2" fill="none"></circle>
+                <path d="M6 21c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"></path>
+              </svg>
+            </div>
             <span>${this.languageManager.getString('guest', 'Guest')}</span>
           </div>
           <div class="power-controls">

@@ -1,0 +1,352 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-02T18:51:00Z",
+  "modules": {
+    "core_module": {
+      "path": "src/core",
+      "description": "Ядро системы - базовые сервисы и менеджеры",
+      "components": [
+        {
+          "name": "StorageManager",
+          "file": "src/core/StorageManager.js",
+          "type": "service",
+          "responsibility": "Управление localStorage для сохранения данных системы"
+        },
+        {
+          "name": "FileSystem",
+          "file": "src/core/FileSystem.js",
+          "type": "service",
+          "responsibility": "Виртуальная файловая система с операциями CRUD"
+        },
+        {
+          "name": "ProcessManager",
+          "file": "src/core/ProcessManager.js",
+          "type": "service",
+          "responsibility": "Управление жизненным циклом процессов (приложений)"
+        },
+        {
+          "name": "EventBus",
+          "file": "src/core/EventBus.js",
+          "type": "service",
+          "responsibility": "Глобальная система событий Pub/Sub для коммуникации компонентов"
+        },
+        {
+          "name": "ThemeManager",
+          "file": "src/core/ThemeManager.js",
+          "type": "service",
+          "responsibility": "Управление темами, обоями и персонализацией интерфейса"
+        },
+        {
+          "name": "LanguageManager",
+          "file": "src/core/LanguageManager.js",
+          "type": "service",
+          "responsibility": "Управление локализацией и загрузкой языковых файлов"
+        },
+        {
+          "name": "FileAssociation",
+          "file": "src/core/FileAssociation.js",
+          "type": "service",
+          "responsibility": "Связывание расширений файлов с приложениями для открытия"
+        },
+        {
+          "name": "SoundManager",
+          "file": "src/core/SoundManager.js",
+          "type": "service",
+          "responsibility": "Управление системными звуками"
+        },
+        {
+          "name": "Utils",
+          "file": "src/core/Utils.js",
+          "type": "utility",
+          "responsibility": "Вспомогательные функции и утилиты"
+        }
+      ]
+    },
+    "apps_module": {
+      "path": "src/apps",
+      "description": "Приложения системы",
+      "components": [
+        {
+          "name": "FileExplorer",
+          "file": "src/apps/FileExplorer/FileExplorer.js",
+          "type": "app",
+          "responsibility": "Проводник файлов для управления файловой системой"
+        },
+        {
+          "name": "Notepad",
+          "file": "src/apps/Notepad/Notepad.js",
+          "type": "app",
+          "responsibility": "Текстовый редактор"
+        },
+        {
+          "name": "Calculator",
+          "file": "src/apps/Calculator/Calculator.js",
+          "type": "app",
+          "responsibility": "Калькулятор"
+        },
+        {
+          "name": "Calendar",
+          "file": "src/apps/Calendar/Calendar.js",
+          "type": "app",
+          "responsibility": "Календарь"
+        },
+        {
+          "name": "Browser",
+          "file": "src/apps/Browser/Browser.js",
+          "type": "app",
+          "responsibility": "Веб-браузер с iframe"
+        },
+        {
+          "name": "Minesweeper",
+          "file": "src/apps/Minesweeper/Minesweeper.js",
+          "type": "app",
+          "responsibility": "Игра Сапёр"
+        },
+        {
+          "name": "Snake",
+          "file": "src/apps/Snake/Snake.js",
+          "type": "app",
+          "responsibility": "Игра Змейка"
+        },
+        {
+          "name": "Terminal",
+          "file": "src/apps/Terminal/Terminal.js",
+          "type": "app",
+          "responsibility": "Терминал командной строки"
+        },
+        {
+          "name": "TaskManager",
+          "file": "src/apps/TaskManager/TaskManager.js",
+          "type": "app",
+          "responsibility": "Диспетчер задач для управления процессами"
+        },
+        {
+          "name": "Settings",
+          "file": "src/apps/Settings/Settings.js",
+          "type": "app",
+          "responsibility": "Настройки системы"
+        },
+        {
+          "name": "Paint",
+          "file": "src/apps/Paint/Paint.js",
+          "type": "app",
+          "responsibility": "Графический редактор"
+        },
+        {
+          "name": "CodeEditor",
+          "file": "src/apps/CodeEditor/CodeEditor.js",
+          "type": "app",
+          "responsibility": "Редактор кода с подсветкой синтаксиса"
+        },
+        {
+          "name": "VisualIDE",
+          "file": "src/apps/VisualIDE/VisualIDE.js",
+          "type": "app",
+          "responsibility": "Визуальный редактор потоков"
+        },
+        {
+          "name": "Doom",
+          "file": "src/apps/Doom/Doom.js",
+          "type": "app",
+          "responsibility": "Игра Doom через js-dos"
+        },
+        {
+          "name": "AudioPlayer",
+          "file": "src/apps/AudioPlayer/AudioPlayer.js",
+          "type": "app",
+          "responsibility": "Аудио плеер"
+        },
+        {
+          "name": "Tetris",
+          "file": "src/apps/Tetris/Tetris.js",
+          "type": "app",
+          "responsibility": "Игра Тетрис"
+        },
+        {
+          "name": "BSOD",
+          "file": "src/apps/BSOD/BSOD.js",
+          "type": "app",
+          "responsibility": "Экран синего экрана смерти"
+        },
+        {
+          "name": "Camera",
+          "file": "src/apps/Camera/Camera.js",
+          "type": "app",
+          "responsibility": "Приложение для работы с камерой и микрофоном"
+        }
+      ]
+    },
+    "components_module": {
+      "path": "src/components",
+      "description": "UI компоненты системы",
+      "components": [
+        {
+          "name": "Desktop",
+          "file": "src/components/Desktop/Desktop.js",
+          "type": "component",
+          "responsibility": "Рабочий стол с иконками и контекстным меню"
+        },
+        {
+          "name": "Taskbar",
+          "file": "src/components/Taskbar/Taskbar.js",
+          "type": "component",
+          "responsibility": "Панель задач с кнопками приложений"
+        },
+        {
+          "name": "StartMenu",
+          "file": "src/components/StartMenu/StartMenu.js",
+          "type": "component",
+          "responsibility": "Меню Пуск с приложениями"
+        },
+        {
+          "name": "WindowManager",
+          "file": "src/components/Window/WindowManager.js",
+          "type": "component",
+          "responsibility": "Менеджер окон с drag & drop и resize"
+        },
+        {
+          "name": "Window",
+          "file": "src/components/Window/Window.js",
+          "type": "component",
+          "responsibility": "Компонент окна приложения"
+        },
+        {
+          "name": "LoginScreen",
+          "file": "src/components/LoginScreen/LoginScreen.js",
+          "type": "component",
+          "responsibility": "Экран входа в систему"
+        },
+        {
+          "name": "PowerOnScreen",
+          "file": "src/components/PowerOnScreen/PowerOnScreen.js",
+          "type": "component",
+          "responsibility": "Экран включения"
+        },
+        {
+          "name": "BootScreen",
+          "file": "src/components/BootScreen/BootScreen.js",
+          "type": "component",
+          "responsibility": "Экран загрузки BIOS"
+        },
+        {
+          "name": "BIOS",
+          "file": "src/components/BIOS/BIOS.js",
+          "type": "component",
+          "responsibility": "Интерфейс BIOS настроек"
+        },
+        {
+          "name": "OSSelectionScreen",
+          "file": "src/components/OSSelectionScreen/OSSelectionScreen.js",
+          "type": "component",
+          "responsibility": "Экран выбора ОС"
+        },
+        {
+          "name": "SystemLoadingScreen",
+          "file": "src/components/SystemLoadingScreen/SystemLoadingScreen.js",
+          "type": "component",
+          "responsibility": "Экран загрузки системы"
+        },
+        {
+          "name": "ShutdownScreen",
+          "file": "src/components/ShutdownScreen/ShutdownScreen.js",
+          "type": "component",
+          "responsibility": "Экран выключения"
+        },
+        {
+          "name": "ContextMenu",
+          "file": "src/components/ContextMenu/ContextMenu.js",
+          "type": "component",
+          "responsibility": "Контекстное меню"
+        },
+        {
+          "name": "Dialog",
+          "file": "src/components/Dialog/Dialog.js",
+          "type": "component",
+          "responsibility": "Диалоговые окна"
+        },
+        {
+          "name": "Notification",
+          "file": "src/components/Notification/Notification.js",
+          "type": "component",
+          "responsibility": "Система уведомлений"
+        },
+        {
+          "name": "NotificationCenter",
+          "file": "src/components/NotificationCenter/NotificationCenter.js",
+          "type": "component",
+          "responsibility": "Центр уведомлений"
+        },
+        {
+          "name": "TaskSwitcher",
+          "file": "src/components/TaskSwitcher/TaskSwitcher.js",
+          "type": "component",
+          "responsibility": "Переключение между задачами (Alt+Tab)"
+        },
+        {
+          "name": "Widgets",
+          "path": "src/components/Widgets",
+          "type": "component",
+          "responsibility": "Виджеты рабочего стола"
+        }
+      ]
+    },
+    "main_module": {
+      "path": "src",
+      "description": "Главный модуль инициализации системы",
+      "components": [
+        {
+          "name": "AndlancerOS",
+          "file": "src/main.js",
+          "type": "orchestrator",
+          "responsibility": "Главный класс системы, инициализация и оркестрация всех компонентов"
+        }
+      ]
+    },
+    "data_module": {
+      "path": "src/data",
+      "description": "Данные по умолчанию и конфигурации",
+      "components": [
+        {
+          "name": "defaultApps",
+          "file": "src/data/defaultApps.js",
+          "type": "data",
+          "responsibility": "Конфигурация приложений по умолчанию"
+        },
+        {
+          "name": "systemCommands",
+          "file": "src/data/systemCommands.js",
+          "type": "data",
+          "responsibility": "Системные команды терминала"
+        }
+      ]
+    },
+    "hakeros_module": {
+      "path": "src/hakeros",
+      "description": "Альтернативная ОС HakerOs",
+      "components": [
+        {
+          "name": "HakerOs",
+          "file": "src/hakeros/HakerOs.js",
+          "type": "os",
+          "responsibility": "Альтернативная операционная система"
+        }
+      ]
+    }
+  },
+  "relationships": {
+    "main_module": {
+      "depends_on": ["core_module", "apps_module", "components_module", "data_module"],
+      "orchestrates": ["core_module", "apps_module", "components_module"]
+    },
+    "core_module": {
+      "provides_to": ["apps_module", "components_module", "main_module"]
+    },
+    "apps_module": {
+      "depends_on": ["core_module"],
+      "uses": ["components_module"]
+    },
+    "components_module": {
+      "depends_on": ["core_module"]
+    }
+  }
+}

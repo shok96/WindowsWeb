@@ -59,7 +59,7 @@ export class AnalogClockWidget {
 
         // Set initial position using left/top like desktop icons
         const parentRect = this.container.getBoundingClientRect();
-        const initialX = parentRect.width - 220 - 50; // parentWidth - selfWidth - offset
+        const initialX = parentRect.width - 240 - 50; // parentWidth - selfWidth - offset
         const initialY = 50;
 
         this.element.style.left = `${initialX}px`;
@@ -73,27 +73,30 @@ export class AnalogClockWidget {
     layout() {
         const rect = this.element.getBoundingClientRect();
         const radius = Math.min(rect.width, rect.height) / 2;
-        // Padding so elements don't touch the edge
-        const padding = radius * 0.1; // 10% padding
+
+        // Position marks very close to the edge
+        const markPaddingFromEdge = 0;
+        const markRadius = radius - markPaddingFromEdge;
 
         // Lengths for hands
-        const hourLen = radius * 0.5;
-        const minuteLen = radius * 0.7;
-        const secondLen = radius * 0.8;
+        const hourLen = radius * 0.45;
+        const minuteLen = radius * 0.65;
+        const secondLen = radius * 0.78;
         this.hourHand.style.height = `${hourLen}px`;
         this.minuteHand.style.height = `${minuteLen}px`;
         this.secondHand.style.height = `${secondLen}px`;
 
         // Make font size responsive
-        const fontSize = Math.max(10, radius * 0.15);
+        const fontSize = Math.max(13, radius * 0.13);
 
-        // Position numbers
-        const numberPadding = fontSize * 0.8; // Dynamic padding
-        const numberRadius = radius - padding - numberPadding;
+        // Position numbers just inside the circle of hour marks
+        const numberPaddingFromMarks = 12;
+        const numberRadius = markRadius - numberPaddingFromMarks;
+
         this.numbers.forEach((el, idx) => {
             const i = idx + 1;
-            el.style.fontSize = `${fontSize}px`; // Apply dynamic font size
-            const angleDeg = (i / 12) * 360 - 90; // 12 at top
+            el.style.fontSize = `${fontSize}px`;
+            const angleDeg = (i / 12) * 360 - 90;
             const angle = angleDeg * Math.PI / 180;
             const x = numberRadius * Math.cos(angle);
             const y = numberRadius * Math.sin(angle);
@@ -102,20 +105,9 @@ export class AnalogClockWidget {
         });
 
         // Position marks
-        const markRadius = radius - padding;
         this.marks.forEach((el, i) => {
-            const angleDeg = i * 6; // 360 / 60
-            el.style.transform = `rotate(${angleDeg}deg) translate(${markRadius}px)`;
-            // Adjust size per hour/minute mark
-            if (i % 5 === 0) {
-                el.style.height = `${Math.max(10, radius * 0.1)}px`;
-                el.style.width = `3px`;
-                el.style.marginLeft = `-1.5px`;
-            } else {
-                el.style.height = `${Math.max(6, radius * 0.06)}px`;
-                el.style.width = `1px`;
-                el.style.marginLeft = `-0.5px`;
-            }
+            const angleDeg = i * 6;
+            el.style.transform = `rotate(${angleDeg}deg) translateY(${-markRadius}px)`;
         });
     }
 

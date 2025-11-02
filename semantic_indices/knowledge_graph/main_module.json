@@ -1,0 +1,99 @@
+{
+  "module": "main_module",
+  "version": "1.0.0",
+  "lastUpdated": "2025-11-02T18:51:00Z",
+  "description": "Главный модуль инициализации и оркестрации системы AndlancerOS",
+  "components": {
+    "AndlancerOS": {
+      "file": "src/main.js",
+      "type": "orchestrator",
+      "responsibility": "Главный класс системы, инициализация и оркестрация всех компонентов",
+      "dependencies": [
+        "Все core модули",
+        "Все apps модули",
+        "Все components модули",
+        "data/defaultApps.js",
+        "data/systemCommands.js"
+      ],
+      "key_contracts": {
+        "@system_contract": "Инициализирует и координирует всю систему AndlancerOS",
+        "@component_contract": "Главный оркестратор компонентов, управление жизненным циклом системы",
+        "@requires": "Все зависимости загружены, DOM готов",
+        "@ensures": "Система инициализирована корректно, компоненты связаны, события обрабатываются",
+        "@invariant": "Все core менеджеры инициализированы перед UI компонентами",
+        "@modifies": "Глобальное состояние через window.app, DOM структура",
+        "@orchestrates": [
+          "StorageManager → FileSystem → ThemeManager",
+          "EventBus → все компоненты",
+          "ProcessManager → WindowManager",
+          "Desktop → Taskbar → StartMenu"
+        ],
+        "@throws": "Ошибки инициализации обрабатываются через Notification"
+      },
+      "integration_points": [
+        "Инициализирует все core модули в правильном порядке",
+        "Регистрирует все приложения в this.apps",
+        "Создает экземпляры Desktop, Taskbar, StartMenu, WindowManager",
+        "Обрабатывает системные события (login, logout, restart, shutdown)",
+        "Обрабатывает горячие клавиши (Win, Ctrl+Alt+Del, Win+E, Win+R)",
+        "Настраивает глобальную обработку ошибок"
+      ],
+      "lifecycle": {
+        "init": "Инициализация core модулей, загрузка языка",
+        "showPowerOnScreen": "Показ экрана включения",
+        "showBootScreen": "Показ экрана загрузки",
+        "showOSSelectionScreen": "Выбор ОС (AndlancerOS или HakerOs)",
+        "showLoginScreen": "Экран входа",
+        "showDesktop": "Инициализация рабочего стола и UI",
+        "openApp": "Запуск приложения через ProcessManager и WindowManager"
+      },
+      "events": {
+        "listens": [
+          "login:success",
+          "app:open",
+          "language:loaded",
+          "system:logout",
+          "system:restart",
+          "system:shutdown",
+          "startmenu:toggle"
+        ],
+        "emits": []
+      }
+    }
+  },
+  "patterns": [
+    "Orchestrator pattern - координация всех компонентов",
+    "Dependency injection - передача зависимостей через конструкторы",
+    "Event-driven - использование EventBus для коммуникации",
+    "Lifecycle management - управление жизненным циклом системы"
+  ],
+  "relationships": {
+    "AndlancerOS": {
+      "orchestrates": [
+        "StorageManager",
+        "FileSystem",
+        "ProcessManager",
+        "EventBus",
+        "ThemeManager",
+        "LanguageManager",
+        "FileAssociation",
+        "Desktop",
+        "Taskbar",
+        "StartMenu",
+        "WindowManager"
+      ],
+      "depends_on": ["Все модули системы"]
+    }
+  },
+  "technical_debt": [],
+  "business_documentation": {
+    "purpose": "Главный класс системы обеспечивает правильную инициализацию и координацию всех компонентов",
+    "critical_features": [
+      "Последовательная инициализация компонентов",
+      "Управление жизненным циклом системы",
+      "Обработка системных событий",
+      "Обработка горячих клавиш",
+      "Глобальная обработка ошибок"
+    ]
+  }
+}

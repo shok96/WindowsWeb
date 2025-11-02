@@ -1,6 +1,35 @@
 /**
  * FileSystem - Виртуальная файловая система для Windows 11 Web OS
  * Управление файлами и папками с сохранением в localStorage
+ * 
+ * === СИСТЕМНЫЕ КОНТРАКТЫ ===
+ * @system_contract: Виртуальная файловая система с сохранением в localStorage через StorageManager
+ * @integration_contract: FileSystem ↔ StorageManager для персистентности, FileSystem → EventBus для уведомлений
+ * @consistency_model: Strong consistency - все операции атомарны через save()
+ * @failure_policy: Ошибки возвращаются через {success: false, error: string}, события не генерируются при ошибке
+ * @performance_contract: Операции O(n) где n - глубина пути, поиск - O(m) где m - количество файлов
+ * 
+ * === КОМПОНЕНТНЫЕ КОНТРАКТЫ ===
+ * @component_contract: CRUD операции над файлами и папками в древовидной структуре
+ * @interface_contract: createFile(), createFolder(), deleteItem(), renameItem(), copyItem(), moveItem(), navigateToPath()
+ * @implementation_strategy: Дерево с корнем root, каждый узел имеет type: 'file'|'folder' и children для папок
+ * 
+ * === ФОРМАЛЬНЫЕ КОНТРАКТЫ ===
+ * @requires: StorageManager инициализирован, EventBus доступен, path валиден
+ * @ensures: createFile() - файл создается с метаданными (type, name, content, size, created, modified)
+ * @ensures: deleteItem() - элемент удаляется, системные файлы защищены (systemFile: true)
+ * @ensures: Все операции сохраняются через StorageManager.save(), генерируют событие 'filesystem:changed'
+ * @invariant: Структура файловой системы всегда валидна (type существует, children для папок, name уникален в папке)
+ * @modifies: StorageManager.data.fileSystem, генерирует события через EventBus
+ * @throws: Ошибки возвращаются как {success: false, error: string}, не выбрасываются
+ * 
+ * === БИЗНЕСОВОЕ ОБОСНОВАНИЕ ===
+ * @why_requires: StorageManager критичен для сохранения файлов между сессиями
+ * @why_ensures: События filesystem:changed позволяют UI обновляться автоматически
+ * @why_invariant: Валидная структура гарантирует что операции всегда безопасны
+ * @why_invariant: Защита системных файлов предотвращает случайное удаление критичных файлов
+ * @business_impact: Нарушение ведет к потере файлов пользователя или повреждению структуры
+ * @stakeholder_value: Пользователь может безопасно работать с файлами, данные сохраняются
  */
 
 export class FileSystem {

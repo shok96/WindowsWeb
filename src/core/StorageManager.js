@@ -1,6 +1,33 @@
 /**
  * StorageManager - Управление localStorage для Windows 11 Web OS
  * Обеспечивает сохранение и загрузку данных системы
+ * 
+ * === СИСТЕМНЫЕ КОНТРАКТЫ ===
+ * @system_contract: Гарантирует персистентность данных системы между сессиями браузера
+ * @integration_contract: Единая точка доступа к localStorage для всех модулей
+ * @consistency_model: Strong consistency - все изменения сохраняются синхронно
+ * @failure_policy: При QuotaExceededError показывает alert и возвращает false
+ * @performance_contract: Операции O(1), размер ограничен localStorage (~5-10MB)
+ * 
+ * === КОМПОНЕНТНЫЕ КОНТРАКТЫ ===
+ * @component_contract: Предоставляет единый интерфейс для работы с localStorage через ключ 'andlanceros'
+ * @interface_contract: API включает save(), load(), update(), get(), export(), import(), clear(), getStorageSize()
+ * @implementation_strategy: JSON сериализация/десериализация, автоматическое добавление timestamp
+ * 
+ * === ФОРМАЛЬНЫЕ КОНТРАКТЫ ===
+ * @requires: localStorage доступен в браузере, data валиден для JSON.stringify
+ * @ensures: save() - данные сохраняются в localStorage с lastModified timestamp
+ * @ensures: load() - возвращает данные или создает хранилище по умолчанию при ошибке
+ * @invariant: storageKey всегда равен 'andlanceros', данные всегда содержат lastModified
+ * @modifies: localStorage ключ 'andlanceros', добавляет lastModified к данным
+ * @throws: QuotaExceededError при переполнении, JSON ошибки при парсинге
+ * 
+ * === БИЗНЕСОВОЕ ОБОСНОВАНИЕ ===
+ * @why_requires: localStorage нужен для сохранения состояния между перезагрузками страницы
+ * @why_ensures: lastModified позволяет отслеживать актуальность данных
+ * @why_invariant: Единый ключ гарантирует что все модули работают с одними данными
+ * @business_impact: Нарушение ведет к потере данных пользователя между сессиями
+ * @stakeholder_value: Пользователь не теряет настройки, файлы и состояние системы
  */
 
 export class StorageManager {
@@ -40,6 +67,13 @@ export class StorageManager {
   /**
    * Сохранение данных в localStorage
    * @param {Object} data - Данные для сохранения
+   * 
+   * @requires: data является валидным объектом, можно сериализовать в JSON
+   * @ensures: data сохраняется в localStorage с обновленным lastModified, возвращает true при успехе
+   * @modifies: localStorage ключ 'andlanceros', добавляет/обновляет data.lastModified
+   * @throws: QuotaExceededError при переполнении (показывает alert), возвращает false
+   * @why_ensures: lastModified критичен для отслеживания актуальности данных
+   * @business_impact: Ошибка сохранения = потеря данных пользователя
    */
   save(data) {
     try {
@@ -58,6 +92,13 @@ export class StorageManager {
   /**
    * Загрузка данных из localStorage
    * @returns {Object} Загруженные данные
+   * 
+   * @requires: localStorage доступен, ключ 'andlanceros' существует или будет создан
+   * @ensures: Возвращает загруженные данные или создает хранилище по умолчанию при ошибке
+   * @invariant: Всегда возвращает валидный объект (никогда не возвращает null/undefined)
+   * @throws: JSON.parse ошибки обрабатываются, возвращается хранилище по умолчанию
+   * @why_ensures: Гарантия валидных данных критична для инициализации других модулей
+   * @stakeholder_value: Система всегда запускается даже при поврежденных данных
    */
   load() {
     try {

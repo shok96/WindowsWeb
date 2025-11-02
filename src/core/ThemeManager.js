@@ -1,6 +1,33 @@
 /**
  * ThemeManager - Управление темами и персонализацией Windows 11 Web OS
  * Управление светлой/темной темой, обоями и акцентным цветом
+ * 
+ * === СИСТЕМНЫЕ КОНТРАКТЫ ===
+ * @system_contract: Единая система персонализации интерфейса
+ * @integration_contract: ThemeManager ↔ StorageManager для персистентности, ThemeManager → EventBus для уведомлений
+ * @consistency_model: Strong consistency - изменения применяются мгновенно и сохраняются
+ * @failure_policy: Невалидные цвета показывают предупреждение, не применяются
+ * @performance_contract: Операции O(1), применение темы через CSS переменные
+ * 
+ * === КОМПОНЕНТНЫЕ КОНТРАКТЫ ===
+ * @component_contract: Управление CSS переменными и сохранение настроек персонализации
+ * @interface_contract: setTheme(), getTheme(), toggleTheme(), setWallpaper(), getWallpaper(), setAccentColor(), getAccentColor()
+ * @implementation_strategy: CSS переменные через document.documentElement, сохранение через StorageManager
+ * 
+ * === ФОРМАЛЬНЫЕ КОНТРАКТЫ ===
+ * @requires: StorageManager инициализирован, EventBus доступен, DOM готов
+ * @ensures: setTheme() - тема применяется к document.documentElement, сохраняется, генерирует событие 'theme:changed'
+ * @ensures: setAccentColor() - цвет валидируется (HEX формат), применяется с hover/pressed вариантами, сохраняется
+ * @invariant: currentTheme всегда валидна ('light' | 'dark'), цвета в формате HEX (#RRGGBB)
+ * @modifies: document.documentElement стили и атрибуты, StorageManager.data.settings, генерирует события через EventBus
+ * @throws: Предупреждения при невалидных форматах цветов (не выбрасываются)
+ * 
+ * === БИЗНЕСОВОЕ ОБОСНОВАНИЕ ===
+ * @why_requires: StorageManager критичен для сохранения настроек между сессиями
+ * @why_ensures: Мгновенное применение темы улучшает UX, события позволяют UI обновляться автоматически
+ * @why_invariant: Валидация тем и цветов предотвращает некорректное отображение интерфейса
+ * @business_impact: Нарушение ведет к несохранению настроек пользователя или некорректному отображению
+ * @stakeholder_value: Пользователь может персонализировать интерфейс, настройки сохраняются
  */
 
 export class ThemeManager {
